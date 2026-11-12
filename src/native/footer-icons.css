@@ -1,0 +1,42 @@
+/* Keep native panel buttons and selection; share one footer row. */
+[data-slot="sidebar"] > div:has(.dsi-dsh) > nav > span:has(> button[aria-haspopup="menu"]) { display:none; }
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) max-content;
+  grid-template-rows:auto auto auto minmax(0,1fr) auto;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > * { grid-column:1 / -1; }
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > div:has(> [data-slot="sidebar.workspaces"]) {
+  grid-row:4;
+  min-height:0;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > div:has([data-slot="sidebar.settings"]) {
+  grid-column:1;
+  grid-row:5;
+  min-width:0;
+  align-self:center;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > nav {
+  grid-column:2;
+  grid-row:5;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  align-self:center;
+  justify-self:end;
+  gap:0;
+  margin:0;
+  padding:0;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > nav > span:has(> button) { flex:none; width:36px; }
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > nav button {
+  flex:none;
+  justify-content:center;
+  gap:0;
+  width:36px;
+  min-width:36px;
+  height:36px;
+  margin:0;
+  padding:0;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > nav button > span:not([aria-hidden="true"]) { display:none; }

@@ -1,0 +1,337 @@
+/* The installed 0.2.2 sidebar publishes these slot anchors. Scope every rule to
+   our mounted, expanded browser so unloading or collapsing restores native chrome. */
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) {
+  --dsi-surface: color-mix(in srgb, var(--dsw-specific-sidebar-fill, var(--dsw-alias-bg-base)) 90%, var(--dsw-alias-label-secondary));
+  --dsi-material-fill: color-mix(in srgb, var(--dsi-surface) 64%, transparent);
+  --dsi-material-filter: blur(18px) saturate(1.1);
+  --dsi-material-hover-fill: color-mix(in srgb, var(--dsw-alias-interactive-bg-hover) 75%, transparent);
+  --dsi-brand-row: 1;
+  --dsi-browser-row: 2;
+  --dsi-tools-row: 3;
+  --dsi-account-row: 3;
+  --dsi-footer-height: 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: 36px minmax(0, 1fr) 40px;
+  gap: 0;
+  background: var(--dsi-surface);
+  padding-bottom: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+}
+
+/* Reserve the native macOS window-control area, then place toggle and brand. */
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) {
+  --dsi-browser-row: 2;
+  --dsi-tools-row: 3;
+  --dsi-account-row: 3;
+  --dsi-caption-controls-width: 82px;
+  --dsi-content-start: var(--dsh-sidebar-inline-padding, 8px);
+  --dsi-content-end: 8px;
+  grid-template-columns: var(--dsi-caption-controls-width) 28px minmax(0, 1fr) max-content;
+  grid-template-rows: 32px minmax(0, 1fr) 40px;
+  position: relative;
+  isolation: isolate;
+}
+
+/* The opaque sidebar surface supplies both materials' backdrop, avoiding the
+   sharp-content leak of filtering a transparent Electron window. */
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag])::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--dsi-footer-height);
+  z-index: 2;
+  background: var(--dsi-material-fill);
+  backdrop-filter: var(--dsi-material-filter);
+  -webkit-backdrop-filter: var(--dsi-material-filter);
+  box-shadow: 0 -1px 0 color-mix(in srgb, var(--dsw-alias-label-primary) 5%, transparent);
+  pointer-events: auto;
+}
+
+/* One material plane sits above the list and below both rows of controls. */
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag])::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--dsi-glass-height, 84px);
+  z-index: 2;
+  background: var(--dsi-material-fill);
+  backdrop-filter: var(--dsi-material-filter);
+  -webkit-backdrop-filter: var(--dsi-material-filter);
+  pointer-events: auto;
+}
+
+/* One backdrop sample covers header and settled heading. The compound clip
+   leaves the list between them interactive; when they meet it becomes one
+   rectangle. A native scroll timeline moves the clip with the sticky heading,
+   without a JavaScript scroll handler or a second filter at the join. */
+[data-dsi-glass-shelf] { timeline-scope: --dsi-history-glass; }
+[data-dsi-glass-shelf] .dsi-content-scroll { scroll-timeline: --dsi-history-glass block; }
+[data-slot="sidebar"] > div[data-dsi-glass-shelf]:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag])::before {
+  height: 100%;
+  clip-path: polygon(0 0, 100% 0, 100% var(--dsi-glass-height), 0 var(--dsi-glass-height),
+    0 var(--dsi-material-shelf-start), 100% var(--dsi-material-shelf-start),
+    100% calc(var(--dsi-material-shelf-start) + var(--dsi-material-shelf-height)),
+    0 calc(var(--dsi-material-shelf-start) + var(--dsi-material-shelf-height)));
+  animation: dsi-history-glass auto linear both;
+  animation-timeline: --dsi-history-glass;
+  animation-range: 0px var(--dsi-material-join-distance);
+}
+@keyframes dsi-history-glass {
+  to { clip-path: polygon(0 0, 100% 0, 100% var(--dsi-glass-height), 0 var(--dsi-glass-height),
+    0 var(--dsi-glass-height), 100% var(--dsi-glass-height),
+    100% calc(var(--dsi-glass-height) + var(--dsi-material-shelf-height)),
+    0 calc(var(--dsi-glass-height) + var(--dsi-material-shelf-height))); }
+}
+[data-dsi-glass-shelf] .dsi-shelf-settled > .dsi-shelf-toggle {
+  --dsi-shelf-material-fill: transparent;
+  --dsi-shelf-material-filter: none;
+  --dsi-shelf-material-hover-fill: color-mix(in srgb, var(--dsw-alias-label-primary) 4%, transparent);
+  z-index: 3;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) > div:has(> [data-slot="sidebar.workspaces"]) {
+  grid-row: 1 / -1;
+  margin-inline: calc(-1 * var(--dsh-sidebar-inline-padding, 8px));
+  padding-left: 0;
+}
+
+/* Carry section surfaces to the same edges as the glass, while keeping the
+   existing text, session cards and toolbar at their original horizontal inset. */
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) .dsi-root {
+  --dsi-footer-inset: var(--dsi-footer-height);
+  padding-right: 0;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) :is(.dsi-active-content, .dsi-shelf) {
+  padding-inline: var(--dsi-content-start) var(--dsi-content-end);
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) > :is(nav, div:has([data-slot="sidebar.settings"])) {
+  background: transparent;
+  border-top-color: transparent;
+}
+
+/* Lift controls only. The settings dialog is a sibling of its trigger row and
+   must retain its existing modal stacking context. */
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) :is(nav button, [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"])) {
+  position: relative;
+  z-index: 3;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) .dsi-shelf-toggle {
+  width: calc(100% + var(--dsi-content-start) + var(--dsi-content-end));
+  margin-left: calc(-1 * var(--dsi-content-start));
+  padding-left: calc(9px + var(--dsi-content-start));
+  padding-right: calc(9px + var(--dsi-content-end));
+  border-radius: 0;
+  background: var(--dsi-shelf-material-fill, var(--dsi-material-fill));
+  backdrop-filter: var(--dsi-shelf-material-filter, var(--dsi-material-filter));
+  -webkit-backdrop-filter: var(--dsi-shelf-material-filter, var(--dsi-material-filter));
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) .dsi-shelf-toggle:hover {
+  background: var(--dsi-shelf-material-hover-fill, var(--dsi-material-hover-fill));
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) .dsi-header-tools {
+  position: absolute;
+  top: 32px;
+  left: var(--dsi-content-start);
+  right: var(--dsi-content-end);
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > [data-window-drag]:not(:has([data-slot="sidebar.brand.name"])) {
+  grid-area: 1 / 1 / 2 / -1;
+  position: relative;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  z-index: 4;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > [data-window-drag]:not(:has([data-slot="sidebar.brand.name"])) [data-sidebar-toggle] {
+  position: absolute;
+  top: 50%;
+  left: var(--dsi-caption-controls-width);
+  right: auto;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) {
+  grid-row: var(--dsi-brand-row);
+  grid-column: 1 / -1;
+  height: 36px;
+  margin: 0;
+  padding: 0 6px;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) {
+  grid-column: 3 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 32px;
+  padding: 0 0 0 8px;
+  overflow: hidden;
+  position: relative;
+  z-index: 4;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) > span > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.dsi-brand-name {
+  display: block;
+  font: 600 15px/24px system-ui, -apple-system, sans-serif;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > button {
+  display: none;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > div:has(> [data-slot="sidebar.workspaces"]) {
+  grid-row: var(--dsi-browser-row);
+  grid-column: 1 / -1;
+  min-height: 0;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > nav {
+  grid-row: var(--dsi-tools-row);
+  grid-column: -2 / -1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  box-sizing: border-box;
+  height: 40px;
+  min-height: 0;
+  margin: 0 calc(-1 * var(--dsh-sidebar-inline-padding, 8px)) 0 0;
+  padding: 3px var(--dsh-sidebar-inline-padding, 8px) 3px 4px;
+  border-top: 1px solid color-mix(in srgb, var(--dsw-alias-label-primary) 5%, transparent);
+  background: var(--dsi-surface);
+  overflow: visible;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > nav button {
+  position: relative;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > nav button > span:not([aria-hidden="true"]) {
+  display: none;
+}
+
+/* Wide native panel tooltips are disabled because they normally have text.
+   The retained accessible label also supplies the compact bar's hover label. */
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > nav button:is(:hover, :focus-visible)::after {
+  content: attr(aria-label);
+  position: absolute;
+  left: auto;
+  right: 0;
+  bottom: calc(100% + 6px);
+  z-index: 4;
+  width: max-content;
+  max-width: 180px;
+  padding: 5px 8px;
+  border: 1px solid var(--dsw-alias-border-l3);
+  border-radius: 5px;
+  color: var(--dsw-alias-label-primary);
+  background: var(--dsw-alias-bg-base);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  text-align: start;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > div:has([data-slot="sidebar.settings"]) {
+  grid-row: var(--dsi-account-row);
+  grid-column: 1 / -2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 40px;
+  min-width: 0;
+  margin-left: calc(-1 * var(--dsh-sidebar-inline-padding, 8px));
+  padding: 3px 0 3px var(--dsh-sidebar-inline-padding, 8px);
+  border-top: 1px solid color-mix(in srgb, var(--dsw-alias-label-primary) 5%, transparent);
+  background: var(--dsi-surface);
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) {
+  height: 32px;
+  margin: 0;
+}
+
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) :is([data-slot="settings.launcher"] button, button:has(> [data-slot="settings.trigger"])) {
+  height: 32px;
+  min-height: 32px;
+  min-width: 0;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+[data-slot="sidebar"] .dsi-toolbar {
+  padding-top: 4px;
+  padding-bottom: 10px;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  [data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) {
+    --dsi-material-fill: var(--dsi-surface);
+    --dsi-material-filter: none;
+    --dsi-material-hover-fill: var(--dsw-alias-interactive-bg-hover);
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  [data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)):has(> [data-window-drag] + [data-window-drag]) {
+    --dsi-material-fill: var(--dsi-surface);
+    --dsi-material-filter: none;
+    --dsi-material-hover-fill: var(--dsw-alias-interactive-bg-hover);
+  }
+}

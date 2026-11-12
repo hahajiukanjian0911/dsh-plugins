@@ -1,0 +1,67 @@
+{
+  "name": "dsh-polish",
+  "version": "0.1.44",
+  "private": true,
+  "description": "打磨 DSH 的视觉与交互细节，让日常使用更顺手。",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icons/lucide/LICENSE",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:sidebar-support": "node scripts/build-sidebar-motion.mjs",
+    "check": "npm run build && node --check index.js && node --check client.js && node --test tests/*.test.mjs",
+    "preview:build": "node scripts/build-preview.mjs",
+    "verify:icons": "node scripts/verify-icons.mjs",
+    "verify:tooltips": "node scripts/verify-tooltips.mjs",
+    "verify:popovers": "node scripts/verify-popovers.mjs",
+    "verify:motion": "node scripts/verify-motion.mjs",
+    "verify:typography": "node scripts/verify-typography-native.mjs",
+    "verify:settings": "node scripts/verify-settings.mjs",
+    "prepack": "npm run check",
+    "preview:glass": "node scripts/build-glass-preview.mjs",
+    "verify:glass": "node scripts/verify-glass.mjs",
+    "preview:composer": "node scripts/build-composer-preview.mjs",
+    "verify:composer": "node scripts/verify-composer.mjs",
+    "verify:composer-popovers": "node scripts/verify-composer-popovers.mjs",
+    "verify:dropdowns": "node scripts/verify-dropdowns.mjs",
+    "verify:frost": "node scripts/verify-frost-material.mjs",
+    "verify:titlebar": "node scripts/verify-titlebar.mjs",
+    "verify:scrollbars": "node scripts/verify-native-scrollbars.mjs",
+    "verify:command-columns": "node scripts/verify-command-columns.mjs",
+    "verify:update-icon": "node scripts/verify-update-icon.mjs",
+    "verify:composer-glass": "node scripts/verify-composer-glass.mjs",
+    "verify:width-settings": "node scripts/verify-width-settings.mjs",
+    "verify:activation": "node scripts/verify-activation.mjs",
+    "verify:floating-materials": "node scripts/verify-floating-materials.mjs",
+    "verify:hero-row": "node scripts/verify-hero-row.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-layout"
+      ]
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

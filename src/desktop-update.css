@@ -1,0 +1,54 @@
+/* The native settings trigger row renders the update indicator as a direct
+   button with aria-disabled. Connection recovery uses data-phase instead.
+   Keep the native button, accessible label, tooltip and click handler intact. */
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled]:not([data-phase]) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 28px;
+  box-sizing: border-box;
+  width: 28px;
+  min-width: 28px;
+  max-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+}
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled]:not([data-phase]) > span:not([aria-hidden]) { display: none; }
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled]:not([data-phase]) > span[aria-hidden="true"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled]:not([data-phase]) svg { width: 16px; height: 16px; }
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled="false"]:not([data-phase]):hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-primary);
+}
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled]:not([data-phase]):focus-visible {
+  outline: 2px solid var(--dsw-alias-state-business-primary);
+  outline-offset: -2px;
+}
+/* Available and ready both use the native download glyph. A tiny dot is enough
+   to mark the pending update; busy phases keep their native spinner instead. */
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled="false"]:not([data-phase]):has(svg)::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--dsw-alias-state-business-primary);
+  outline: 2px solid var(--dsi-surface);
+  pointer-events: none;
+}
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled="true"]:not([data-phase]) { color: var(--dsw-alias-state-business-primary); }
+:where([data-slot="sidebar"]:has(.dsi-root:not(.dsi-rail))) [data-slot="sidebar.settings"] > div:has(> [data-slot="settings.launcher"]) > button[aria-disabled]:not([data-phase]):not(:has(svg)) { color: var(--dsw-alias-state-error-primary); }

@@ -1,0 +1,24 @@
+/* Installed DesktopUpdateIndicator: compact the native button, keep its blue,
+   accessible labels, Tooltip and guarded update action in the host component. */
+:root [data-slot="sidebar"] .G-tjAW_indicator {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--dsw-radius-md);
+  background: transparent;
+  grid-template-columns: 16px;
+  justify-content: center;
+  gap: 0;
+}
+:root [data-slot="sidebar"] .G-tjAW_indicator > span:last-child { display: none; }
+:root [data-slot="sidebar"] .G-tjAW_icon,
+:root [data-slot="sidebar"] .G-tjAW_icon > svg { width: 16px; height: 16px; }
+:root [data-slot="sidebar"] .G-tjAW_indicator:not([aria-disabled="true"]):hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+:root [data-slot="sidebar"] .G-tjAW_indicator:focus-visible {
+  outline: var(--dsw-focus-ring-width, 2px) solid var(--dsw-focus-ring-color, Highlight);
+  outline-offset: -2px;
+}

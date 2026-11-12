@@ -1,0 +1,146 @@
+{
+  "repository": "https://github.com/pingdotgg/t3code",
+  "commit": "5d5ab80a685774f3911c32d842b02a512e60d8ce",
+  "files": [
+    {
+      "path": "components/ui/button.tsx",
+      "source": "apps/web/src/components/ui/button.tsx",
+      "originalSha256": "c3c48c2aed5e91cfb8a69bccdc7b95e2cf4e984e4383a1182ac8dcda3abc83e8",
+      "sha256": "9d85886e7b10eaab9366b79b16a869a671e89f1e4c184d4180dccec69a8a8ab6",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ui/input.tsx",
+      "source": "apps/web/src/components/ui/input.tsx",
+      "originalSha256": "6dc3d407a0b2d1c027a64e47eb9d9ed92f44aeb0a3aaff88d1fc1747054256a7",
+      "sha256": "c61bdf4613ef05ade6735551989247c1ba4dd5927f5b23884a85ab92e56b19bd",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ui/closing-positioner.tsx",
+      "source": "apps/web/src/components/ui/closing-positioner.tsx",
+      "originalSha256": "dd15747bb5e8d5abd33fac0ee8aa8267a98e8bba259563c78e210f1452aa7917",
+      "sha256": "92b2c077fc5336bc641c226ca16e0e1fd00428532a45078638640932102490e2",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ui/menu.tsx",
+      "source": "apps/web/src/components/ui/menu.tsx",
+      "originalSha256": "8ce67cda60850b4789d35b904d0be55dac5a2186841f53f3601ad0f4225db0c1",
+      "sha256": "4b2d9e8b593a6cf3907561c3666ad4efdb8ce03fe21bd38cd74309aa3a676202",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ui/tooltip.tsx",
+      "source": "apps/web/src/components/ui/tooltip.tsx",
+      "originalSha256": "62f488af5d4cd70746e0ff3508602607b9646ae057152b3dd413a0d442f3cf07",
+      "sha256": "3b24064ac1615b4de9441647b77501ba9e021df3a6aced8a12a2e70deed11f5f",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ui/scroll-area.tsx",
+      "source": "apps/web/src/components/ui/scroll-area.tsx",
+      "originalSha256": "f063524e4ecb9846fe2d968ded53c1e04cfa87349d87e31f8591653a43e9db45",
+      "sha256": "4c363bf065860c74503b6cfcbbf92dbcf207dd5680cb32210c0c6801c11218c8",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ui/collapsible-section-header.tsx",
+      "source": "apps/web/src/components/ui/collapsible-section-header.tsx",
+      "originalSha256": "cffb3c4bde61385b868dce0eccf35f24fcb9de570c20be679e9ba26780e2972e",
+      "sha256": "8eae1c0fa4f311d8d911ec27692458ff73bc2d3abefddc4f369d63143e2e7c8e",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ui/spinner.tsx",
+      "source": "apps/web/src/components/ui/spinner.tsx",
+      "originalSha256": "3998104c2839197c5246bc3a54adeec985fb827eb02a5e6fd1504dcacbe0087c",
+      "sha256": "0fa4f12ca407c0e81ec8c4587531466b083af856a2aef11c5efda96eb3a0b503",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ProjectMonogram.tsx",
+      "source": "apps/web/src/components/ProjectMonogram.tsx",
+      "originalSha256": "f114f11c10c01c8695ae99caf21298a51aea1756b0c977285e532f528637ab32",
+      "sha256": "c5dc213149f32de8d73e1c8a5058a7a66fb35286568fdb3b36c8a263e99da8b0",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "projectIconColors.ts",
+      "source": "apps/web/src/projectIconColors.ts",
+      "originalSha256": "20f74838fa0f35d8ee493034a3c6bbde12aa8d72c2c0614b54f2aa995c8bed5c",
+      "sha256": "20f74838fa0f35d8ee493034a3c6bbde12aa8d72c2c0614b54f2aa995c8bed5c",
+      "mode": "verbatim"
+    },
+    {
+      "path": "projectIdentity.ts",
+      "source": "apps/web/src/projectIdentity.ts",
+      "originalSha256": "9a4bea5553c15e554927b143ca36cb1a350728f0198a3fb6ec47c63d74465c0b",
+      "sha256": "9a4bea5553c15e554927b143ca36cb1a350728f0198a3fb6ec47c63d74465c0b",
+      "mode": "verbatim"
+    },
+    {
+      "path": "lib/visibleAnimation.ts",
+      "source": "apps/web/src/lib/visibleAnimation.ts",
+      "originalSha256": "6d48ffad8cee4c4d43310c2fa719b413860d99c9f79c9151e56e562a303d42ae",
+      "sha256": "6d48ffad8cee4c4d43310c2fa719b413860d99c9f79c9151e56e562a303d42ae",
+      "mode": "verbatim"
+    },
+    {
+      "path": "lib/observeResize.ts",
+      "source": "apps/web/src/lib/observeResize.ts",
+      "originalSha256": "513d207eb83eb5937beda20debd4aa4c4bef50dd86cb82dc4f5c68ec6b06cca2",
+      "sha256": "513d207eb83eb5937beda20debd4aa4c4bef50dd86cb82dc4f5c68ec6b06cca2",
+      "mode": "verbatim"
+    },
+    {
+      "path": "components/Sidebar.motion.ts",
+      "source": "apps/web/src/components/Sidebar.motion.ts",
+      "originalSha256": "7770d0b035f64245306e66ec45380d2c8067643688b234f6549362edef3dbfb1",
+      "sha256": "7770d0b035f64245306e66ec45380d2c8067643688b234f6549362edef3dbfb1",
+      "mode": "verbatim"
+    },
+    {
+      "path": "components/sidebar/SidebarThreadHeader.tsx",
+      "source": "apps/web/src/components/sidebar/SidebarThreadHeader.tsx",
+      "originalSha256": "459f79383dd47476fd81bd6e43db9c42677208b7043107dffcb608ac81217045",
+      "sha256": "b11ade99705e9eb2b237e289879860633cf2e788d2d8b2837e7e358a83a6bd69",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/sidebar/SidebarListMarkers.tsx",
+      "source": "apps/web/src/components/sidebar/SidebarListMarkers.tsx",
+      "originalSha256": "211265e1e1db774b7cdc27f54e5387b62dc04efb488ec35b62e3f9de1aecfb77",
+      "sha256": "00ed9c29566ad4f1ef1682df18e75de022c70440330d1a5817b084f2ca69c788",
+      "mode": "React 18 refs; scoped portals; DSH translation/import adaptation"
+    },
+    {
+      "path": "components/ui/context-menu.tsx",
+      "source": "apps/web/src/components/ui/menu.tsx",
+      "originalSha256": "8ce67cda60850b4789d35b904d0be55dac5a2186841f53f3601ad0f4225db0c1",
+      "sha256": "b97f25fd181c049d1ff8a940198b3fd2d904403538b2d00c906e445f0229ca36",
+      "mode": "T3 menu presentation applied to Base UI ContextMenu primitives; React 18 refs; scoped portal"
+    },
+    {
+      "path": "components/ui/sidebar.tsx",
+      "source": "apps/web/src/components/ui/sidebar.tsx",
+      "originalSha256": "e05949d9f2e14ce21233cf14049151f30c29a48050b2bfd9d70ac4fa43c717dd",
+      "sha256": "c72badf94b1bc020850722728af551e318b920e2cfa602735aff6ffde576c07a",
+      "mode": "Verbatim presentation declarations; DSH context and React 18 ref adaptation"
+    },
+    {
+      "path": "theme.css",
+      "source": "apps/web/src/index.css",
+      "originalSha256": "90d1f7c7aed8f4dfb155b9cac4f15787f1fdffca3c253c5b9d6b284170977ff8",
+      "sha256": "c4364ee38305ff757ef852d9845cc4db603a4c7423e22f6a6beb38e6c6f863f1",
+      "mode": "T3 theme tokens, contrast, dropdown glass and visible-spinner utilities; root scoped to plugin"
+    },
+    {
+      "path": "components/sidebar/SidebarThreadPresentation.tsx",
+      "source": "apps/web/src/components/sidebar/SidebarThreadRow.tsx",
+      "originalSha256": "be7ee4ebfd94d6933cbee67f2dd3d97c05c7623c3aa5a827ec8a0cc03fe0dbe8",
+      "sha256": "5052f20a0c2275b23197d3860c4cb5f63dca6a3fbc5c4627f9f5fb66038a019f",
+      "mode": "DSH-native card/slim surfaces over the adapted T3 row structure; backend-dependent UI removed"
+    }
+  ]
+}

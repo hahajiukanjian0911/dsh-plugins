@@ -1,0 +1,188 @@
+/* DSH 0.2.2-rc.1: one material family for application-owned floating surfaces.
+   MenuSurface retains its native material child, backing and close lifecycle. */
+:root, body {
+  --dsp-glass-solid: color-mix(in srgb, var(--dsw-alias-bg-layer-2, Canvas) 96%, var(--dsw-alias-label-primary, CanvasText));
+  --dsp-glass-fill: var(--dsp-glass-solid);
+  --dsp-glass-opacity: 66%;
+  --dsp-glass-filter: none;
+  --dsp-glass-text: var(--dsw-alias-label-primary, CanvasText);
+  --dsp-glass-secondary: color-mix(in srgb, var(--dsp-glass-text) 90%, var(--dsp-glass-solid));
+  --dsp-glass-caption: var(--dsp-glass-secondary);
+  --dsp-glass-stroke: color-mix(in srgb, var(--dsp-glass-text) 14%, transparent);
+  --dsp-glass-shadow: 0 8px 28px light-dark(rgb(0 0 0 / 13%), rgb(0 0 0 / 32%)), 0 2px 6px light-dark(rgb(0 0 0 / 5%), rgb(0 0 0 / 16%));
+}
+
+body[data-ds-dark-theme] { --dsp-glass-opacity: 78%; }
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root, body {
+    --dsp-glass-fill: color-mix(in srgb, var(--dsp-glass-solid) var(--dsp-glass-opacity), transparent);
+    --dsp-glass-filter: blur(28px) saturate(140%);
+  }
+}
+
+/* Stable data/role anchors; the three class anchors are verified host primitives:
+   HoverCard, the floating selection toolbar, and Toast. Never style portal roots,
+   invisible hover bridges, full-screen masks or ordinary role=alert content. */
+:root :is([data-menu-material], [role="tooltip"], [role="dialog"], ._card_bgejw_9, ._panel_denjv_2, ._toast_hr9yd_6) {
+  --dsp-glass-radius: 12px;
+  --dsw-menu-surface-fill: var(--dsp-glass-fill);
+  --dsw-menu-backdrop-filter: var(--dsp-glass-filter);
+  --dsw-specific-menu: var(--dsp-glass-fill);
+  --dsw-hovercard-bg: var(--dsp-glass-fill);
+  --dsw-alias-label-secondary: var(--dsp-glass-secondary);
+  --dsw-alias-label-tertiary: var(--dsp-glass-caption);
+  --dsp-popover-label: var(--dsp-glass-secondary);
+  color: var(--dsp-glass-text);
+  border-color: transparent;
+  border-radius: var(--dsp-glass-radius);
+  outline: 1px solid var(--dsp-glass-stroke);
+  outline-offset: -1px;
+  box-shadow: var(--dsp-glass-shadow);
+}
+
+/* Native menus blur on their single material child. Simple leaf surfaces paint
+   directly; do not add another filtered layer around MenuSurface. */
+:root :is([role="tooltip"], ._panel_denjv_2, ._toast_hr9yd_6):not([data-menu-material]) {
+  background: var(--dsp-glass-fill);
+  -webkit-backdrop-filter: var(--dsp-glass-filter);
+  backdrop-filter: var(--dsp-glass-filter);
+}
+
+/* Filtering an interactive panel itself makes it a containing block for fixed
+   tooltips and menus. Filter only its background, leaving native geometry intact. */
+:root :is([role="dialog"], ._card_bgejw_9):not([data-menu-material]) {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  isolation: isolate;
+}
+:root :is([role="dialog"], ._card_bgejw_9):not([data-menu-material])::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--dsp-glass-fill);
+  -webkit-backdrop-filter: var(--dsp-glass-filter);
+  backdrop-filter: var(--dsp-glass-filter);
+  pointer-events: none;
+}
+
+/* An opacity-animated ancestor would block its background's backdrop sampling.
+   Keep the same native fade duration on the material and content separately. */
+:root ._dialog_14mp3_33 { animation: none; }
+:root ._dialog_14mp3_33::before,
+:root ._dialog_14mp3_33 > * { animation: dsp-glass-modal-enter var(--ds-transition-duration) var(--ds-ease-in-out); }
+@keyframes dsp-glass-modal-enter { from { opacity: 0; } to { opacity: 1; } }
+:root ._card_bgejw_9._preview_bgejw_52 { opacity: 1; transition: none; }
+:root ._card_bgejw_9._preview_bgejw_52::before,
+:root ._card_bgejw_9._preview_bgejw_52 > * { opacity: 1; transition: opacity var(--dsh-hover-preview-fade) linear; }
+:root ._card_bgejw_9._preview_bgejw_52[data-closing] { opacity: 1; }
+:root ._card_bgejw_9._preview_bgejw_52[data-closing]::before,
+:root ._card_bgejw_9._preview_bgejw_52[data-closing] > * { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  :root ._dialog_14mp3_33::before, :root ._dialog_14mp3_33 > * { animation: none; }
+  :root ._card_bgejw_9._preview_bgejw_52::before, :root ._card_bgejw_9._preview_bgejw_52 > * { transition: none; }
+}
+
+:root [data-menu-backing] { border-radius: 12px; }
+
+/* Portaled menus leave the conversation's color-scheme scope. Resolve the same
+   light-dark edge/shadow colors for both body portals and nested menus. */
+:root :is([data-menu-material], ._card_bgejw_9, [role="dialog"]:has(> dl:is([data-turn-usage-details], [data-session-stats-details], [data-session-stats-usage])), [role="dialog"].X0HXfW_panel, [data-team-panel][role="dialog"]) { color-scheme: light; border-radius: var(--dsp-glass-radius); }
+body[data-ds-dark-theme] :is([data-menu-material], ._card_bgejw_9, [role="dialog"]:has(> dl:is([data-turn-usage-details], [data-session-stats-details], [data-session-stats-usage])), [role="dialog"].X0HXfW_panel, [data-team-panel][role="dialog"]) { color-scheme: dark; }
+
+/* One compact frost for menus, statistics, context, team and hover cards: retain the one native backdrop sample and opaque
+   backing, while preserving the blur of nearby conversation text. A smaller kernel
+   avoids washing all detail out of compact permission/model menus. The inset
+   highlight supplies an edge on quiet white backgrounds without another layer. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root :is([data-menu-material], ._card_bgejw_9, [role="dialog"]:has(> dl:is([data-turn-usage-details], [data-session-stats-details], [data-session-stats-usage])), [role="dialog"].X0HXfW_panel, [data-team-panel][role="dialog"]) {
+    --dsp-glass-opacity: 52%;
+    --dsp-glass-fill: color-mix(in srgb, var(--dsp-glass-solid) var(--dsp-glass-opacity), transparent);
+    --dsp-glass-filter: blur(8px) saturate(160%);
+    --dsp-glass-secondary: color-mix(in srgb, var(--dsp-glass-text) 98%, var(--dsp-glass-solid));
+    --dsp-glass-caption: var(--dsp-glass-secondary);
+    --dsp-popover-label: var(--dsp-glass-secondary);
+    --dsp-glass-stroke: color-mix(in srgb, var(--dsp-glass-text) 9%, transparent);
+    --dsp-glass-highlight: inset 0 1px 0 light-dark(rgb(255 255 255 / 90%), rgb(255 255 255 / 14%)),
+      inset 0 -1px 0 light-dark(rgb(0 0 0 / 2%), rgb(0 0 0 / 12%));
+    --dsp-glass-shadow: 0 12px 32px light-dark(rgb(0 0 0 / 12%), rgb(0 0 0 / 32%)),
+      0 2px 8px light-dark(rgb(0 0 0 / 4%), rgb(0 0 0 / 12%));
+    outline-offset: 0;
+  }
+  :root [data-menu-material] > [class*="_material_"],
+  :root :is([data-menu-material], ._card_bgejw_9, [role="dialog"]:has(> dl:is([data-turn-usage-details], [data-session-stats-details], [data-session-stats-usage])), [role="dialog"].X0HXfW_panel, [data-team-panel][role="dialog"]):not([data-menu-material])::before { box-shadow: var(--dsp-glass-highlight, none); }
+  body[data-ds-dark-theme] :is([data-menu-material], ._card_bgejw_9, [role="dialog"]:has(> dl:is([data-turn-usage-details], [data-session-stats-details], [data-session-stats-usage])), [role="dialog"].X0HXfW_panel, [data-team-panel][role="dialog"]) { --dsp-glass-opacity: 71%; }
+}
+
+/* These verified native team tiles otherwise paint opaque cards over the frost.
+   Keep their borders, current/disabled state and status colors intact. */
+:root [data-team-panel] :is(.XdyUwa_member, .XdyUwa_task) {
+  background: color-mix(in srgb, var(--dsp-glass-text) 3%, transparent);
+}
+
+:root [role="tooltip"] { --dsp-glass-radius: 8px; }
+:root [role="tooltip"] :is(kbd, [class*="_key"]) { color: var(--dsp-glass-secondary); }
+:root [role="dialog"][aria-modal="true"] { --dsp-glass-radius: 20px; }
+
+/* Compact native HoverCard content historically assumes a black panel. */
+:root ._card_bgejw_9 :is(.JoiKIa_hoverTitle, ._copied_bgejw_36) { color: var(--dsp-glass-text); }
+:root ._card_bgejw_9 :is(.JoiKIa_hoverPath, .JoiKIa_hoverTime, .JoiKIa_hoverStatus) { color: var(--dsp-glass-secondary); }
+
+/* Keep the large settings window one material, with a quiet navigation tint. */
+:root [data-shortcut-modal="settings"] :is(._77Pn0W_navTitle, ._77Pn0W_nav) {
+  background: color-mix(in srgb, var(--dsp-glass-text) 3%, transparent);
+}
+
+/* On Chromium versions that support customizable native selects, keep browser
+   selection semantics while using the same in-page picker material. Older hosts
+   retain their system-managed picker. Embedded and multi-select lists stay put. */
+@supports (appearance: base-select) {
+  :root select:not([multiple]):not([size]), :root select:not([multiple])[size="1"] { appearance: base-select; }
+  :root select:not([multiple]):not([size])::picker(select), :root select:not([multiple])[size="1"]::picker(select) {
+    appearance: base-select;
+    padding: 6px;
+    border: 0;
+    border-radius: 12px;
+    color: var(--dsp-glass-text);
+    background: var(--dsp-glass-fill);
+    -webkit-backdrop-filter: var(--dsp-glass-filter);
+    backdrop-filter: var(--dsp-glass-filter);
+    outline: 1px solid var(--dsp-glass-stroke);
+    outline-offset: -1px;
+    box-shadow: var(--dsp-glass-shadow);
+    font: inherit;
+  }
+  /* These two verified host controls already draw a chevron as a background.
+     Plain selects keep the browser's picker icon so the affordance is not lost. */
+  :root select:is(.JZLxKW_select, .tUAPGa_selectInput)::picker-icon { display: none; }
+  :root select:not([multiple]):not([size]) option, :root select:not([multiple])[size="1"] option {
+    min-height: 32px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    color: var(--dsp-glass-text);
+    background: transparent;
+    font: inherit;
+  }
+  :root select:not([multiple]) option:is(:hover, :focus) { background: var(--dsw-alias-interactive-bg-hover); }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  :root, body, :root :is([data-menu-material], ._card_bgejw_9, [role="dialog"]:has(> dl:is([data-turn-usage-details], [data-session-stats-details], [data-session-stats-usage])), [role="dialog"].X0HXfW_panel, [data-team-panel][role="dialog"]) { --dsp-glass-fill: var(--dsp-glass-solid); --dsp-glass-filter: none; }
+}
+
+@media (forced-colors: active) {
+  :root, body, :root :is([data-menu-material], ._card_bgejw_9, [role="dialog"]:has(> dl:is([data-turn-usage-details], [data-session-stats-details], [data-session-stats-usage])), [role="dialog"].X0HXfW_panel, [data-team-panel][role="dialog"]) {
+    --dsp-glass-solid: Canvas;
+    --dsp-glass-fill: Canvas;
+    --dsp-glass-filter: none;
+    --dsp-glass-text: CanvasText;
+    --dsp-glass-secondary: CanvasText;
+    --dsp-glass-caption: CanvasText;
+    --dsp-glass-stroke: CanvasText;
+    --dsp-glass-shadow: none;
+    --dsp-glass-highlight: none;
+  }
+}

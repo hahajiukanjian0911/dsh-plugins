@@ -1,0 +1,61 @@
+/* 只统一提示的视觉，原生 Tooltip 继续负责自己的定位与快捷键。 */
+[role="tooltip"] {
+  box-sizing: border-box;
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 4px 8px;
+  border: 1px solid color-mix(in srgb, var(--dsw-alias-label-primary, CanvasText) 12%, transparent);
+  border-radius: 6px;
+  background: var(--dsw-alias-bg-base, Canvas);
+  color: var(--dsw-alias-label-primary, CanvasText);
+  box-shadow: 0 3px 12px rgb(0 0 0 / 14%);
+  font: 400 13px/18px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: normal;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-shadow: none;
+}
+
+[role="tooltip"] > span:first-child {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+/* 收件箱横向工具栏的旧伪元素提示退出，避免同时画两份文字。 */
+[data-slot="sidebar"] > div:has(.dsi-root:not(.dsi-rail)) > nav button:is(:hover, :focus-visible)::after {
+  content: none !important;
+  display: none !important;
+}
+
+[data-dsh-polish-tooltip] {
+  position: fixed;
+  z-index: 10000;
+  width: max-content;
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+}
+
+/* Full candidate copy stays outside the list, so hover never changes a row. */
+[data-dsh-polish-tooltip][data-polish-candidate] {
+  max-width: min(560px, calc(100vw - 24px));
+  max-height: min(360px, calc(100vh - 24px));
+  padding: 10px 12px;
+  line-height: 20px;
+  white-space: pre-line;
+}
+
+[data-dsh-polish-tooltip][hidden] {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  [role="tooltip"] {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+}

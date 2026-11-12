@@ -1,0 +1,94 @@
+/* DSH 0.2.2-rc.1: verified InputTrigger, AgentPresetSeat and ModelSelect classes.
+   Keep MenuSurface's one native material layer, anchoring and event handlers. */
+:root [data-menu-material][role="menu"] {
+  min-width: min(184px, calc(100vw - 24px), var(--dsh-anchored-max-width, 100vw));
+}
+
+/* Project names and paths share the same compact two-line reading rhythm. */
+:root [data-menu-material][role="menu"]:has(.dpm-composer-option) {
+  width: min(344px, calc(100vw - 24px), var(--dsh-anchored-max-width, 100vw));
+}
+:root [data-menu-material] .dpm-composer-option { max-width: 100%; gap: 2px; }
+:root [data-menu-material] .dpm-composer-option > span { font-size: 13px; font-weight: 500; line-height: 20px; }
+:root [data-menu-material] .dpm-composer-option > small { color: var(--dsp-popover-label); font-size: 12px; line-height: 18px; }
+:root [data-menu-material]:has(.dpm-composer-option) [role="menuitem"] > [class*="_itemLabel"]:first-child { padding-inline-start: 24px; }
+
+/* Commands and typed suggestions share one name/description row. The native
+   item nodes and ordering stay intact; descriptions keep a shared column. */
+:root [data-composer-card] .z8WDjq_menu {
+  width: min(var(--dsp-dropdown-width, 100%), calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+  max-height: min(400px, calc(100vh - 120px));
+  right: auto;
+  padding: 6px;
+  bottom: calc(100% + 8px);
+  font: 400 13px/20px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+:root .z8WDjq_viewport { gap: 0; overscroll-behavior: contain; }
+:root .z8WDjq_item {
+  display: flex;
+  gap: 8px;
+  flex: none;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-family: inherit;
+  align-items: center;
+}
+:root .z8WDjq_item:not(:has(.z8WDjq_itemIcon))::before { content: ""; width: 16px; flex: none; }
+:root .z8WDjq_itemIcon { flex: none; width: 16px; height: 16px; color: var(--dsw-alias-label-secondary); }
+:root .z8WDjq_itemIcon svg { width: 16px; height: 16px; }
+:root .z8WDjq_itemName { flex: 0 1 auto; min-width: 0; max-width: 30%; font-size: 13px; line-height: 20px; }
+:root .z8WDjq_itemAlias { flex: 0 1 auto; min-width: 0; max-width: 16%; font-size: 12px; line-height: 18px; color: var(--dsp-popover-label); }
+:root .z8WDjq_itemDescription {
+  display: block;
+  flex: 0 0 60%;
+  min-width: 0;
+  margin: 0 0 0 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: start;
+  color: var(--dsp-popover-label);
+  font-size: 13px;
+  line-height: 20px;
+}
+:root .z8WDjq_itemDescription:empty { display: none; }
+:root .z8WDjq_trailing { flex: 0 1 auto; min-width: 0; margin-left: 0; }
+@media (max-width: 560px) {
+  :root .z8WDjq_itemDescription { flex-basis: 52%; }
+}
+:root :is(.z8WDjq_sectionTitle, .z8WDjq_groupTitle) {
+  flex: none;
+  min-height: 0;
+  padding: 3px 10px 1px;
+  color: var(--dsp-popover-label);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
+:root .z8WDjq_sectionTitle:not(:first-child) { margin-top: 2px; }
+:root .z8WDjq_item:focus-visible { outline: 2px solid var(--dsw-focus-ring-color, Highlight); outline-offset: -2px; }
+
+/* Preset descriptions remain fully visible, with readable secondary contrast. */
+:root [data-menu-material][role="menu"]:has(.ufIuna_item) {
+  width: min(344px, calc(100vw - 24px), var(--dsh-anchored-max-width, 100vw));
+}
+:root [data-menu-material] .ufIuna_item { gap: 4px; max-width: 100%; min-width: 0; }
+:root [data-menu-material] .ufIuna_itemName { color: var(--dsw-alias-label-primary); font-size: 13px; font-weight: 500; line-height: 20px; }
+:root [data-menu-material] .ufIuna_itemDesc { color: var(--dsp-popover-label); font-size: 12px; line-height: 18px; overflow-wrap: anywhere; }
+:root [data-menu-material] .ufIuna_itemDesc:empty { display: none; }
+
+/* Model summary, model list, effort list and search use the same menu metrics. */
+:root [data-menu-material].htuFrW_menu { padding: 6px; min-width: min(248px, calc(100vw - 24px), var(--dsh-anchored-max-width, 100vw)); }
+:root [data-menu-material] :is(.htuFrW_cell, .htuFrW_option) { min-height: 36px; height: auto; padding: 8px 10px; border-radius: 8px; gap: 8px; }
+:root [data-menu-material] .htuFrW_modelName { font-size: 13px; line-height: 20px; }
+:root [data-menu-material] .htuFrW_searchRow { margin: 0 0 4px; }
+:root [data-menu-material] .htuFrW_searchRow .htuFrW_search { padding: 8px 10px; }
+:root [data-menu-material] .htuFrW_searchRow .htuFrW_search input { font-size: 13px; }
+:root [data-menu-material] .htuFrW_searchRow .htuFrW_search input::placeholder { color: var(--dsp-popover-label); }
+
+@media (pointer: coarse) {
+  :root .z8WDjq_item, :root [data-menu-material] :is(.htuFrW_cell, .htuFrW_option) { min-height: 44px; }
+  :root [data-menu-material] .htuFrW_searchRow .htuFrW_search input { font-size: 16px; }
+}

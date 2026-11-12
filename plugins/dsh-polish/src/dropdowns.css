@@ -1,0 +1,14 @@
+/* One opening rule for first-level composer menus; nested menus stay native.
+   No root transforms/opacity animation: preserve the live glass material and
+   keep frequent pointer and keyboard selection immediate. */
+:root [data-menu-material][data-dsp-dropdown] {
+  position: fixed !important;
+  inset: auto !important;
+  left: var(--dsp-dropdown-left) !important;
+  top: var(--dsp-dropdown-top) !important;
+  max-width: var(--dsp-dropdown-max-width) !important;
+  max-height: var(--dsp-dropdown-max-height) !important;
+}
+:root [data-dsp-dropdown-active] {
+  background: var(--dsw-alias-fill-quaternary, color-mix(in srgb, currentColor 6%, transparent));
+}

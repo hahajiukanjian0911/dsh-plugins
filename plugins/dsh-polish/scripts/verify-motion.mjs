@@ -1,0 +1,156 @@
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {mkdtemp,readFile,writeFile,mkdir,rm} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {join} from 'node:path';
+import {build as bundle} from 'esbuild';
+import {chromium} from 'playwright-core';
+import {build,root} from './build.mjs';
+
+await build();
+const repo=fileURLToPath(new URL('../../',root));
+const {version}=JSON.parse(await readFile(new URL('package.json',root),'utf8'));
+const output=join(repo,`outputs/dsh-polish-${version}`);
+await mkdir(output,{recursive:true});
+const temporary=await mkdtemp(join(repo,'temp/polish-motion-check-'));
+const sideClient=execFileSync('tar',['-xOf',join(repo,'releases/dsh-inbox-sidebar-0.1.32-polish.1.tgz'),'package/lib/client.js'],{encoding:'utf8'});
+const polishClient=await readFile(new URL('client.js',root),'utf8');
+const checks=[];const errors=[];
+let browser;
+try {
+  const rendered=await bundle({entryPoints:[join(repo,'scripts/preview.jsx')],bundle:true,write:false,format:'iife',platform:'browser',target:'es2022',minify:true,define:{'process.env.NODE_ENV':'"production"'},plugins:[{
+    name:'published-sidebar-only',setup(builder){builder.onLoad({filter:/\/lib\/client\.js$/},args=>args.path===join(repo,'lib/client.js')?{contents:sideClient,loader:'js',resolveDir:repo}:undefined);},
+  }]});
+  const template=await readFile(join(repo,'temp/design/inbox-sidebar/index.html'),'utf8');
+  const html=template.replace(/<script[^>]*>[\s\S]*?<\/script>/,()=>`<script>${rendered.outputFiles[0].text.replaceAll('</script','<\\/script')}</script>`);
+  await writeFile(join(temporary,'index.html'),html);
+  browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+  const page=await browser.newPage({viewport:{width:390,height:900},deviceScaleFactor:2,reducedMotion:'no-preference'});
+  page.on('pageerror',error=>errors.push(error.message));
+  await page.goto(new URL('file://'+join(temporary,'index.html')).href);
+  await page.waitForFunction(()=>window.inboxDemo?.fixture);
+  await page.evaluate(()=>{
+    window.motionSavedLoader=window.__ModuleLoader__;window.motionDisposers=[];
+    window.motionCreated=[];const nativeAnimate=Element.prototype.animate;
+    Element.prototype.animate=function(...args){const animation=Reflect.apply(nativeAnimate,this,args);if(this.matches('.dsi-snooze-menu'))window.motionCreated.push({element:this,animation});return animation;};
+    window.__ModuleLoader__={load(module){window.motionPlugin=module.factory();window.motionPlugin.apply({effect(callback){window.motionDisposers.push(callback());}});}};
+  });
+  await page.addScriptTag({content:polishClient});
+  await page.evaluate(()=>{window.__ModuleLoader__=window.motionSavedLoader;});
+  const tip=page.locator('[data-dsh-polish-tooltip]');
+  const plugin=page.getByRole('button',{name:'插件',exact:true});
+  const schedules=page.getByRole('button',{name:'自动化任务',exact:true});
+  const more=page.getByRole('button',{name:'更多',exact:true});
+  await plugin.hover();await page.waitForTimeout(100);assert.equal(await tip.count(),0);
+  await tip.waitFor({state:'visible'});assert.equal(await tip.textContent(),'插件');
+  await schedules.hover();assert.equal(await tip.textContent(),'自动化任务');assert.equal(await tip.isVisible(),true);
+  await more.hover();assert.equal(await tip.textContent(),'更多');assert.equal(await page.locator('[role=tooltip]:visible').count(),1);
+  checks.push('首次 400ms，同一底栏相邻提示立即切换且只有一个浮层');
+  await page.keyboard.press('Escape');await tip.waitFor({state:'hidden'});
+  await plugin.hover();await page.waitForTimeout(100);assert.equal(await tip.isVisible(),false);await tip.waitFor({state:'visible'});
+  await page.mouse.move(380,420);await tip.waitFor({state:'hidden'});await page.waitForTimeout(330);
+  await schedules.hover();await page.waitForTimeout(100);assert.equal(await tip.isVisible(),false);await tip.waitFor({state:'visible'});
+  checks.push('Escape 与离开后的过期窗口均恢复首次等待');
+
+  const shelf=page.locator('.dsi-shelf-settled > .dsi-shelf-toggle');
+  await shelf.click();
+  const arrow=shelf.locator('svg').first();
+  const arrowDuration=await arrow.evaluate(node=>getComputedStyle(node).transitionDuration);
+  assert.equal(arrowDuration,'0.16s');
+  await page.waitForTimeout(200);
+  await page.evaluate(()=>document.documentElement.style.setProperty('--dsp-motion-shelf-duration','640ms'));
+  await shelf.click();await page.waitForTimeout(45);
+  const halfway=await arrow.evaluate(node=>{const m=new DOMMatrix(getComputedStyle(node).transform);return Math.atan2(m.b,m.a)*180/Math.PI;});
+  assert.ok(halfway>0&&halfway<90);
+  await shelf.click();
+  const keyframe=await arrow.evaluate(node=>node.getAnimations()[0]?.effect.getKeyframes()[0].transform);
+  assert.ok(keyframe&&keyframe!=='none'&&keyframe!=='matrix(0, 1, -1, 0, 0, 0)',keyframe);
+  await page.waitForTimeout(700);
+  await shelf.focus();await page.keyboard.press('Enter');
+  assert.equal(await arrow.evaluate(node=>getComputedStyle(node).transitionDuration),'0s');
+  await page.evaluate(()=>document.documentElement.style.removeProperty('--dsp-motion-shelf-duration'));
+  checks.push('折叠箭头为 160ms transition，反向从中途继续，键盘不动画');
+
+  const card=page.locator('.dsi-card').filter({has:page.getByText('实现会话收件箱',{exact:true})});
+  await card.hover();
+  const trigger=card.getByRole('button',{name:'稍后提醒',exact:true});
+  const anchorBefore=await trigger.boundingBox();
+  await trigger.click();
+  const menu=page.locator('.dsi-snooze-menu');
+  await menu.waitFor();
+  await page.waitForTimeout(25);
+  const entry=await menu.evaluate(node=>({phase:node.getAttribute('data-dsh-polish-phase'),mode:node.getAttribute('data-dsh-polish-snooze'),animations:window.motionCreated.filter(record=>record.element===node).map(({animation:a})=>({duration:a.effect.getTiming().duration,frames:a.effect.getKeyframes().map(k=>({opacity:k.opacity,transform:k.transform}))})),origin:getComputedStyle(node).transformOrigin,position:[node.style.left,node.style.top]}));
+  assert.equal(entry.phase,'open');assert.ok(entry.animations.some(a=>a.duration===125));
+  assert.deepEqual(await trigger.boundingBox(),anchorBefore);
+  await page.waitForTimeout(150);
+  await page.screenshot({path:join(output,'motion-snooze-light.png')});
+  await page.emulateMedia({colorScheme:'dark'});await page.screenshot({path:join(output,'motion-snooze-dark.png')});await page.emulateMedia({colorScheme:'light'});
+  checks.push('真实发布组件的提醒入场 125ms，时钟几何不变，深浅色已截图');
+
+  await page.evaluate(()=>document.documentElement.style.setProperty('--dsp-motion-popover-duration','500ms'));
+  await menu.getByRole('button',{name:'关闭',exact:true}).click({force:true});
+  const closing=await menu.evaluate(node=>({connected:node.isConnected,open:node.matches(':popover-open'),phase:node.getAttribute('data-dsh-polish-phase'),pointer:getComputedStyle(node).pointerEvents}));
+  assert.equal(closing.connected,true);assert.equal(closing.open,false);assert.equal(closing.phase,'closing');assert.equal(closing.pointer,'none');
+  await page.waitForTimeout(550);assert.equal(await menu.count(),0);
+  await page.evaluate(()=>document.documentElement.style.removeProperty('--dsp-motion-popover-duration'));
+  assert.equal(await trigger.evaluate(node=>node===document.activeElement),true);
+  checks.push('关闭立即退出命中并恢复焦点，节点待有限退场完成后移除');
+
+  await trigger.click();await page.waitForTimeout(35);
+  await menu.getByRole('button',{name:'关闭',exact:true}).click({force:true});
+  await trigger.click();
+  await page.waitForTimeout(200);
+  assert.equal(await menu.count(),1);assert.equal(await menu.evaluate(node=>node.matches(':popover-open')),true);
+  await page.keyboard.press('Escape');await menu.waitFor({state:'detached'});
+  await trigger.focus();await page.keyboard.press('Enter');
+  assert.equal(await menu.getAttribute('data-dsh-polish-snooze'),'keyboard');
+  assert.equal(await menu.evaluate(node=>node.getAnimations().length),0);
+  await page.keyboard.press('Escape');await menu.waitFor({state:'detached'});
+  checks.push('快速关闭再打开不被旧回调移除；键盘打开和 Escape 关闭即时完成');
+
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await trigger.click();await page.waitForTimeout(15);
+  const reduced=await menu.evaluate(node=>({mode:node.getAttribute('data-dsh-polish-snooze'),frames:node.getAnimations().flatMap(a=>a.effect.getKeyframes().map(k=>k.transform)),durations:node.getAnimations().map(a=>a.effect.getTiming().duration)}));
+  assert.equal(reduced.mode,'reduced');assert.ok(reduced.frames.every(v=>v===undefined||v==='none'));assert.ok(reduced.durations.every(v=>v===60));
+  await page.keyboard.press('Escape');await menu.waitFor({state:'detached'});
+  checks.push('减少动态效果下只保留 60ms 透明度，不进行缩放');
+  await page.emulateMedia({reducedMotion:'no-preference'});
+
+  await trigger.click();await page.waitForTimeout(150);
+  await menu.getByRole('button',{name:/1 小时后/}).click();
+  assert.equal(await page.evaluate(()=>window.inboxDemo.hooks.inbox.getSnapshot().rows.find(row=>row.id==='current')?.section),'snoozed');
+  await page.waitForTimeout(200);assert.equal(await menu.count(),0);
+  checks.push('选择提醒立即更新业务状态，视觉收尾没有等待网络或全量刷新');
+
+  const nextCard=page.locator('.dsi-card').filter({has:page.getByText('检查快速记录的解析结果',{exact:true})});
+  await nextCard.hover();const nextTrigger=nextCard.getByRole('button',{name:'稍后提醒',exact:true});
+  await page.evaluate(()=>{
+    const probe=document.createElement('div');probe.className='dsi-snooze-menu';probe.setAttribute('popover','manual');
+    const native=probe.animate.bind(probe);const created=[];probe.animate=(...args)=>{const animation=native(...args);created.push(animation);return animation;};
+    document.body.appendChild(probe);probe.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,pointerType:'mouse'}));
+    window.motionDetachedProbe={probe,created};probe.showPopover();
+  });
+  await page.waitForTimeout(160);
+  await page.evaluate(()=>{const {probe}=window.motionDetachedProbe;probe.hidePopover();probe.remove();});
+  await page.waitForTimeout(160);
+  const detached=await page.evaluate(()=>window.motionDetachedProbe.created.map(a=>a.playState));
+  assert.equal(detached.length,2);assert.equal(detached.at(-1),'idle');
+  checks.push('关闭事件尚未送达就卸载的弹层也会取消持有最后一帧的动画');
+  await nextTrigger.click();await page.waitForTimeout(160);
+  await menu.getByRole('button',{name:'关闭',exact:true}).click();
+  await page.evaluate(()=>window.motionDisposers.toReversed().forEach(dispose=>dispose()));
+  await page.waitForTimeout(30);
+  assert.equal(await page.locator('[data-dsh-polish]').count(),0);
+  assert.equal(await page.locator('[data-dsh-polish-tooltip]').count(),0);
+  assert.equal(await page.locator('[data-dsh-polish-snooze]').count(),0);
+  assert.equal(await page.locator('html').getAttribute('data-dsh-polish-motion'),null);
+  assert.equal(await menu.count(),0);
+  await nextTrigger.click();await page.waitForTimeout(20);
+  assert.equal(await menu.evaluate(node=>node.getAnimations().length),0);
+  await menu.getByRole('button',{name:'关闭',exact:true}).click();
+  await menu.waitFor({state:'detached'});
+  checks.push('退场期间停用可清理所有样式、属性和节点；停用后的提醒立即关闭');
+  assert.deepEqual(errors,[]);
+  await writeFile(join(output,'motion-check.json'),JSON.stringify({version,sidebar:'0.1.32-polish.1',passed:checks.length,checks,entry,errors,scope:'后台 Chrome，真实已发布侧栏的最小生命周期回补与新 Polish 客户端；宿主数据隔离模拟，未在实际 DSH 内合成输入。'},null,2)+'\n');
+  console.log(JSON.stringify({passed:checks.length,checks,errors},null,2));
+} finally {await browser?.close();await rm(temporary,{recursive:true,force:true});}

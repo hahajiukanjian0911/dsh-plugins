@@ -1,0 +1,140 @@
+/* DSH 0.2.2 AppFrame. Activate only while our public shell.overlay entry exists.
+   Native macOS lights occupy y=18..32; the 32px row ends at their native lower edge. */
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) {
+  --dsp-titlebar-height:32px;
+  --dsp-frame-edge:4px;
+  --dsp-frame-radius:12px;
+  --dsp-titlebar-leading:92px;
+  --dsp-titlebar-control-top:calc((var(--dsp-titlebar-height) - 20px) / 2);
+  --dsp-shell-fill:linear-gradient(to bottom,#7a9bf01a,#7a9bf000 35%,#8f89b800 68%,#8f89b817),color-mix(in srgb,color-mix(in srgb,var(--dsw-specific-sidebar-fill) 97%,#7a9bf0) 40%,transparent);
+  --dsh-frame-top-clearance:0px;
+  --dsh-frame-leading-clearance:0px;
+  --dsh-frame-chrome-top:0px;
+  --dsh-frame-overlay-top:20px;
+  padding-top:var(--dsp-titlebar-height);
+  padding-bottom:var(--dsp-frame-edge);
+  background:var(--dsp-shell-fill);
+}
+html[data-platform="darwin"] [data-ds-dark-theme] .PIRFFq_frame:has([data-dsp-titlebar]) {
+  --dsp-shell-fill:linear-gradient(to bottom,#7a9bf014,#7a9bf000 35%,#8f89b800 68%,#8f89b812),color-mix(in srgb,var(--dsw-specific-sidebar-fill) 50%,transparent);
+}
+html[data-platform="darwin"][data-fullscreen] .PIRFFq_frame:has([data-dsp-titlebar]) {
+  --dsp-titlebar-leading:16px;
+}
+/* One shell material behind the titlebar, sidebar and slim outer rim. */
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]):not([data-sidebar-drawer]) > .PIRFFq_sidebarCol { background:transparent; }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) > .PIRFFq_centerCol {
+  margin-right:var(--dsp-frame-edge);
+  border:1px solid var(--dsw-alias-border-l3);
+  border-radius:var(--dsp-frame-radius);
+  corner-shape:round;
+  box-shadow:0 1px 2px rgb(0 0 0 / 3%);
+}
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]):is([data-sidebar-collapsed],[data-sidebar-drawer]) > .PIRFFq_centerCol { margin-left:var(--dsp-frame-edge); }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) > .PIRFFq_rightbarCol { background:transparent; }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) .Dv5QdW_panel {
+  box-sizing:border-box;
+  right:var(--dsp-frame-edge);
+  max-width:calc(100vw - 2 * var(--dsp-frame-edge));
+  border-radius:var(--dsp-frame-radius);
+  corner-shape:round;
+}
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) .Dv5QdW_panel[data-sidebar-right-open] {
+  border:1px solid var(--dsw-alias-border-l3);
+  background:var(--dsw-alias-bg-base);
+}
+html[data-platform="darwin"] .PIRFFq_frame [data-dsp-titlebar] {
+  position:absolute;
+  inset:0 0 auto;
+  height:var(--dsp-titlebar-height);
+  color:var(--dsw-alias-label-primary);
+  pointer-events:none;
+  user-select:none;
+}
+[data-dsp-titlebar-brand] {
+  position:absolute;
+  left:calc(var(--dsp-titlebar-leading) + 32px);
+  top:calc((var(--dsp-titlebar-height) - 14px) / 2);
+  display:flex;
+  align-items:center;
+  height:14px;
+}
+[data-dsp-titlebar-brand] > svg { display:block;height:14px;width:auto; }
+[data-dsp-titlebar-drag] {
+  position:absolute;
+  inset:0 88px 0 calc(var(--dsp-titlebar-leading) + 188px);
+  pointer-events:auto;
+  -webkit-app-region:drag;
+}
+/* The frame's collapsed attribute is the immediate ownership switch; the
+   SidebarRoot's wide/rail transition settles later and must not paint here. */
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar])[data-sidebar-collapsed] [data-slot="sidebar"] [data-sidebar-toggle] { display:none; }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar])[data-sidebar-drawer]:not([data-sidebar-collapsed]) [data-shell-leading] { visibility:hidden; }
+/* Existing controls stay in their React tree. Fixed seats escape the clipped
+   sidebar without reparenting nodes or reimplementing native actions. */
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-sidebar-toggle],
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-shell-leading] {
+  position:fixed;
+  top:var(--dsp-titlebar-control-top);
+  left:var(--dsp-titlebar-leading);
+  z-index:21;
+  margin:0;
+  transform:none;
+  -webkit-app-region:no-drag;
+}
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) [data-sidebar-toggle],
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) :is([data-sidebar-toggle],[data-sidebar-opener],[data-sidebar-right-expand],[data-sidebar-right-toggle],[data-sidebar-right-mode]) {
+  width:20px;
+  height:20px;
+  min-width:20px;
+  padding:3px;
+  color:var(--dsw-alias-label-secondary);
+  -webkit-app-region:no-drag;
+}
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) [data-sidebar-toggle] svg,
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) :is([data-sidebar-toggle],[data-sidebar-opener],[data-sidebar-right-expand],[data-sidebar-right-toggle],[data-sidebar-right-mode]) svg { width:14px;height:14px; }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-slot="sidebar"] > div > [data-window-drag]:has([data-sidebar-toggle]) { display:contents; }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-slot="sidebar"] > .kB3qhq_root > .kB3qhq_logoRow[data-window-drag],
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-slot="sidebar"] > .kB3qhq_root:has(.dsi-dsh:not(.dsi-rail)) > .kB3qhq_logoRow[data-window-drag] { display:none; }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-shell-leading] [data-sidebar-opener] ~ button { display:none; }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-sidebar-right-expand] {
+  position:fixed;
+  top:var(--dsp-titlebar-control-top);
+  right:16px;
+  z-index:21;
+}
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-sidebar-right-mode] {
+  position:fixed;
+  top:var(--dsp-titlebar-control-top);
+  right:52px;
+  z-index:21;
+  -webkit-app-region:no-drag;
+}
+/* Keep the resident right panel's collapse and mode controls together. */
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) [data-sidebar-right-toggle] {
+  position:fixed;
+  top:var(--dsp-titlebar-control-top);
+  right:16px;
+  z-index:21;
+}
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]) .kiGsTW_headerBlank {
+  min-height:0;
+  height:0;
+  padding:0;
+}
+/* Drawers remain the native modal navigation surface below the titlebar. */
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar])[data-sidebar-drawer] [data-sidebar-mask] { top:var(--dsp-titlebar-height); }
+html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar])[data-sidebar-drawer] .PIRFFq_sidebarCol {
+  top:0;
+  bottom:0;
+  padding-top:var(--dsp-titlebar-height);
+  background:linear-gradient(to bottom,transparent var(--dsp-titlebar-height),var(--dsw-specific-sidebar-fill) var(--dsp-titlebar-height));
+}
+@media(prefers-reduced-transparency:reduce) {
+  html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]),
+  html[data-platform="darwin"] [data-ds-dark-theme] .PIRFFq_frame:has([data-dsp-titlebar]) { --dsp-shell-fill:color-mix(in srgb,var(--dsw-specific-sidebar-fill) 90%,transparent); }
+}
+@media(forced-colors:active) {
+  html[data-platform="darwin"] .PIRFFq_frame:has([data-dsp-titlebar]),
+  html[data-platform="darwin"] [data-ds-dark-theme] .PIRFFq_frame:has([data-dsp-titlebar]) { --dsp-shell-fill:Canvas; }
+}

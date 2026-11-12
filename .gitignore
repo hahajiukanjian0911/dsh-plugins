@@ -1,0 +1,11 @@
+node_modules/
+temp/
+releases/
+outputs/
+/.impeccable/
+/plans/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log

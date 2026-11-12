@@ -1,0 +1,128 @@
+/* 字号与字体家族继续读取 DSH 原生设置；根字号和终端由宿主负责。 */
+html body {
+  --dsp-reading-size: var(--dsh-content-font-size, 16px);
+  --dsp-reading-leading: calc(var(--dsp-reading-size) * 1.75);
+  --dsp-code-size: var(--dsh-code-font-size, 13px);
+  --dsp-code-leading: calc(var(--dsp-code-size) + 8px);
+  --dsp-type-muted: color-mix(in srgb, var(--dsw-alias-label-primary, CanvasText) 70%, var(--dsw-alias-bg-base, Canvas));
+  --dsp-interface-size: 14px;
+  --dsp-interface-leading: 20px;
+  font-family: var(--dsw-font-family, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif);
+  font-size: var(--dsp-interface-size);
+  line-height: var(--dsp-interface-leading);
+  font-kerning: normal;
+  font-optical-sizing: auto;
+}
+
+html body :where(button, input, select, textarea) {
+  font-family: inherit;
+}
+
+/* 导航、主题选项和字段标签共用界面尺度，字号不随正文设置变化。 */
+:root [data-shortcut-modal="settings"] :is(._77Pn0W_navCell, .RrNL-q_themeCube) {
+  font-size: var(--dsp-interface-size);
+  line-height: var(--dsp-interface-leading);
+}
+
+:root [data-shortcut-modal="settings"] :is(.KaH-Nq_title, .yO5RqG_title, .xdKASq_title, .dsi-settings-label) {
+  font-size: var(--dsp-interface-size);
+  font-weight: 500;
+  line-height: var(--dsp-interface-leading);
+}
+
+/* 侧栏行高保持原值，让时间摆脱原来的 10px 小字。 */
+html body .dsi-dsh .dsi-dsh-time {
+  font-size: 11px;
+  line-height: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+html body .dsi-dsh-row:not([data-state="warning"], [data-state="error"], [data-state="ongoing"]) .dsi-dsh-time {
+  color: var(--dsw-alias-label-secondary);
+}
+
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]),
+html body [data-conversation-content] [data-message-bubble],
+html body [data-composer-input] {
+  font-family: var(--dsw-font-family, system-ui, sans-serif);
+  font-size: var(--dsp-reading-size);
+  font-weight: 400;
+  line-height: var(--dsp-reading-leading);
+  letter-spacing: normal;
+}
+
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) :is(h1, h2, h3, h4, h5, h6) {
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.5;
+  text-wrap: balance;
+  margin-block: calc(var(--dsp-reading-size) * 1.5) calc(var(--dsp-reading-size) * .5);
+}
+
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) h1 {
+  font-size: calc(var(--dsp-reading-size) * 1.5);
+}
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) h2 {
+  font-size: calc(var(--dsp-reading-size) * 1.25);
+}
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) h3 {
+  font-size: calc(var(--dsp-reading-size) * 1.125);
+}
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) :is(h4, h5, h6) {
+  font-size: var(--dsp-reading-size);
+}
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) p {
+  text-wrap: pretty;
+}
+
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) > :is(p, ul, ol) {
+  margin-block: calc(var(--dsp-reading-size) * .75);
+}
+
+html body [data-conversation-content] :is([class*="_markdown_"] pre, .md-code-block pre) {
+  font-family: var(--ds-font-family-code, Menlo, Consolas, monospace);
+  font-size: var(--dsp-code-size);
+  line-height: var(--dsp-code-leading);
+}
+
+html body [data-conversation-content] :is([class*="_markdown_"] pre, .md-code-block pre) > code {
+  font: inherit;
+}
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) :not(pre) > code {
+  font-family: var(--ds-font-family-code, Menlo, Consolas, monospace);
+  /* 宿主以 !important 固定为 .875em；这里恢复独立代码字号设置。 */
+  font-size: var(--dsp-code-size) !important;
+  font-weight: 400;
+  line-height: var(--dsp-code-leading);
+}
+
+/* 标题里的代码跟随标题尺度；正文和代码块继续使用独立代码字号。
+   !important 仅覆盖上方及宿主的行内代码字号约束。 */
+html body [data-conversation-content] [class*="_markdown_"]:not([class*="_compact_"]) :is(h1, h2, h3, h4, h5, h6) code {
+  display: inline;
+  font-size: inherit !important;
+  font-weight: inherit;
+  line-height: inherit;
+  overflow-wrap: anywhere;
+}
+
+html body [data-conversation-content] :is(time, [class*="_timeStart"], [class*="_timeEnd"], [class*="_endInfo"]) {
+  color: var(--dsp-type-muted);
+  font-family: var(--dsw-font-family, system-ui, sans-serif);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  font-variant-numeric: tabular-nums;
+}
+html body [data-conversation-content] [class*="_endInfo"] :where(button, span, time) {
+  font: inherit;
+  font-variant-numeric: inherit;
+}
+
+/* 保留宿主触屏输入区的 16px 下限，避免小正文设置触发输入缩放。 */
+@media (pointer: coarse) {
+  html body [data-composer-input] {
+    font-size: max(16px, var(--dsp-reading-size));
+    line-height: calc(max(16px, var(--dsp-reading-size)) * 1.75);
+  }
+}

@@ -1,0 +1,16 @@
+/* Remove the native transcript handles from paint and hit testing. Splitters
+   for the sidebar/right panel use other markers and remain untouched. */
+:root .kiGsTW_widthHandle[data-width-handle] { display: none !important; }
+
+.dsp-width-setting { display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:10px 20px;padding:12px 0; }
+.dsp-width-title { display:block;color:var(--dsw-alias-label-primary);font-size:13px;font-weight:500;line-height:20px; }
+.dsp-width-hint { margin:4px 0 0;color:var(--dsw-alias-label-secondary);font-size:12px;line-height:18px; }
+.dsp-width-controls { display:flex;align-items:center;gap:8px;max-width:100%; }
+.dsp-width-controls select { box-sizing:border-box;min-width:96px;min-height:32px;border:1px solid var(--dsw-alias-border-l3);border-radius:6px;background:var(--dsw-specific-input-major);color:var(--dsw-alias-label-primary);padding:5px 24px 5px 9px;font:400 13px/20px system-ui; }
+.dsp-width-controls select:focus-visible { outline:2px solid var(--dsw-focus-ring-color,Highlight);outline-offset:2px; }
+.dsp-width-number { display:flex;align-items:center;gap:6px;min-width:0;color:var(--dsw-alias-label-secondary);font-size:12px; }
+.dsp-width-number > :first-child { width:96px;min-width:0; }
+.dsp-width-number input { font-variant-numeric:tabular-nums; }
+.dsp-width-error { grid-column:1/-1;margin:0;color:var(--dsw-alias-state-error-primary);font-size:12px;line-height:18px; }
+@media(max-width:767px) { .dsp-width-setting { grid-template-columns:minmax(0,1fr); }.dsp-width-controls { flex-wrap:wrap; } }
+@media(pointer:coarse) { .dsp-width-controls select { min-height:44px;font-size:16px; }.dsp-width-number input { font-size:16px; } }

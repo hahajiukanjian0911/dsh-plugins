@@ -1,0 +1,97 @@
+/* One window-control row followed by search, Projects and New Session. */
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) {
+  grid-template-rows:auto 0 0 minmax(0,1fr) auto;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:not(:has([data-slot="sidebar.brand.name"])) {
+  grid-row:1;
+  height:40px;
+  min-height:40px;
+}
+/* Match the native macOS AppFrame shell.leading seat (88px, 11px).
+   Fullscreen has no traffic lights and uses the host's 12px leading inset. */
+html[data-platform="darwin"] [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:not(:has([data-slot="sidebar.brand.name"])) {
+  justify-content:flex-start;
+  align-items:flex-start;
+  padding:11px 12px 1px 88px;
+}
+html[data-platform="darwin"][data-fullscreen] [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:not(:has([data-slot="sidebar.brand.name"])) {
+  padding-left:12px;
+}
+html[data-platform="darwin"] [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag] > [data-sidebar-toggle] {
+  transform:none;
+  -webkit-app-region:no-drag;
+}
+/* Both the fully hidden macOS sidebar and the native icon rail omit New Session. */
+html:has([data-slot="sidebar"] .dsi-dsh) [data-shell-leading] [data-sidebar-opener] ~ button,
+[data-sidebar-collapsed] [data-slot="sidebar"] > div:has(.dsi-dsh) > button,
+[data-slot="sidebar"] > div:has(.dsi-rail) > button {
+  display:none;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) {
+  display:none;
+}
+/* Reuse the native brand identity in the existing caption row.
+   Offset its drag rectangle with margin, not transparent padding: Electron
+   still treats pointer-events:none elements as native window-drag regions. */
+html[data-platform="darwin"] [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) {
+  display:flex;
+  grid-row:1;
+  grid-column:1 / -1;
+  height:40px;
+  margin:-6px 0 0 116px;
+  padding:11px 0 1px;
+  pointer-events:none;
+}
+html[data-platform="darwin"][data-fullscreen] [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) {
+  margin-left:40px;
+}
+html[data-platform="darwin"] [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) > span > span {
+  max-width:100%;
+  gap:4px;
+}
+html[data-platform="darwin"] [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) svg {
+  width:18px;
+  height:18px;
+}
+html[data-platform="darwin"] [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > [data-window-drag]:has([data-slot="sidebar.brand.name"]) [data-slot="sidebar.brand.name"] svg {
+  width:117px;
+  max-width:100%;
+  min-width:0;
+  height:auto;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > button {
+  grid-row:4;
+  grid-column:1 / -1;
+  justify-self:end;
+  align-self:start;
+  justify-content:center;
+  z-index:1;
+  width:28px;
+  min-width:28px;
+  height:28px;
+  min-height:28px;
+  margin:4px 0 0;
+  padding:0;
+  border:0;
+  border-radius:var(--dsw-radius-sm,6px);
+  background:transparent;
+  -webkit-app-region:no-drag;
+}
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > button svg,
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) [data-sidebar-toggle] svg { width:16px; height:16px; }
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) [data-sidebar-toggle] { width:28px; height:28px; }
+.dsi-dsh:not(.dsi-rail) .dsi-dsh-toolbar { gap:8px; padding-right:44px; }
+.dsi-dsh-toolbar .dsi-dsh-icon-button { width:28px; height:28px; }
+.dsi-dsh-toolbar .dsi-dsh-search { min-height:28px; padding:0 6px; margin-left:-6px; border-radius:var(--dsw-radius-sm,6px); }
+.dsi-dsh-toolbar .dsi-dsh-search:focus-within { background:var(--dsw-alias-interactive-bg-hover); }
+.dsi-dsh-toolbar .dsi-dsh-search:has(input:focus-visible) { outline-width:1px; outline-offset:1px; }
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > button > span:first-child { mask-image:none; overflow:visible; }
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > button > span:first-child > span { gap:0; }
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > button > span:first-child > span > span,
+[data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > button > span:not(:first-child) { display:none; }
+@media (hover:hover) {
+  [data-slot="sidebar"] > div:has(.dsi-dsh:not(.dsi-rail)) > button:hover { background:var(--dsw-alias-interactive-bg-hover); }
+}
+/* The archive browser uses this row for its own navigation and total. */
+[data-slot="sidebar"] > div:has(.dsi-dsh[data-sidebar-view="settled"]:not(.dsi-rail)) > button { display:none; }
+.dsi-dsh[data-sidebar-view="settled"]:not(.dsi-rail) .dsi-dsh-toolbar { padding-right:8px; }

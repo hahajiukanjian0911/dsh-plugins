@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { dirname,resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const metadata=JSON.parse(await readFile(resolve(root,'package.json'),'utf8'));
+assert.equal(metadata.name,'dsh-inbox-sidebar');
+const result=await promisify(execFile)('npm',['pack','--pack-destination',resolve(root,'releases')],{cwd:root});
+process.stdout.write(result.stdout);process.stderr.write(result.stderr);

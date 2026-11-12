@@ -1,0 +1,251 @@
+/* Keep the interactive whale/headline and the directory picker in one row.
+   Native nodes and handlers stay in their original React tree. */
+[data-conversation-content] [class*="_composerHero"] {
+  display: grid;
+  grid-template-columns: minmax(min-content, 1fr) minmax(0, 1fr);
+  align-items: center;
+  position: relative;
+  width: min(872px, 100%);
+  max-width: 872px;
+  --dsh-composer-card-max-width: 840px;
+  gap: 16px;
+}
+[data-conversation-content] [class*="_composerHero"] > * { grid-column: 1 / -1; min-width: 0; }
+/* Slot outlets use display:contents, so their rendered children own the grid cells. */
+[data-conversation-content] [class*="_composerHero"] > :is([data-slot="conversation.composer.bar"], [data-slot="conversation.input.dock"]) > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+[data-conversation-content] [class*="_composerHero"] > [class*="_root"]:has([class*="_headline"]) {
+  grid-column: 1;
+  grid-row: 1;
+  margin-left: 16px;
+  display: flex;
+  flex: none;
+  height: auto;
+  padding: 0;
+  user-select: none;
+}
+[data-conversation-content] [class*="_composerHero"] ._8tPydW_headline { justify-content: flex-start; flex-wrap: nowrap; white-space: nowrap; }
+[data-conversation-content] [class*="_composerHero"] ._8tPydW_previewBadge { display: none; }
+[data-conversation-content] [class*="_composerHero"] > [class*="_root"]:has([class*="_headline"]) [class*="_body"] {
+  display: none;
+}
+[data-conversation-content] [class*="_composerHero"] > [class*="_root"]:has([class*="_headline"]) svg[class*="_fish"] {
+  width: 40px;
+  height: auto;
+}
+[data-conversation-content] [class*="_composerHero"] > [class*="_heroWorkspaceRow"] {
+  grid-column: 2;
+  grid-row: 1;
+  justify-content: flex-end;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 16px 0 0;
+  gap: 0;
+}
+[data-conversation-content] [class*="_composerHero"] > [class*="_heroWorkspaceRow"] > button {
+  min-height: 40px;
+  padding: 4px 8px;
+  gap: 10px;
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 500;
+}
+[data-conversation-content] [class*="_composerHero"] [data-dpm-project-anchor] .dpm-composer-chip {
+  font: inherit;
+}
+[data-conversation-content] [class*="_composerHero"] [data-dpm-project-anchor] .dpm-composer-icon,
+[data-conversation-content] [class*="_composerHero"] [data-dpm-project-anchor] .dpm-composer-icon > .dpm-project-icon {
+  width: 20px;
+  height: 20px;
+}
+[data-conversation-content] [class*="_composerHero"] [data-composer-card] {
+  border-radius: 20px;
+}
+@media (max-width: 560px) {
+  [data-conversation-content] [class*="_composerHero"] ._8tPydW_headline { font-size: 18px; line-height: 24px; gap: 8px; }
+  [data-conversation-content] [class*="_composerHero"] > [class*="_root"]:has([class*="_headline"]) svg[class*="_fish"] { width: 28px; }
+  [data-conversation-content] [class*="_composerHero"] > [class*="_heroWorkspaceRow"] > button { font-size: 16px; line-height: 24px; gap: 6px; padding-inline: 4px; }
+  [data-conversation-content] [class*="_composerHero"] .dpm-composer-context { font-size: 12px; gap: 4px; }
+  [data-conversation-content] [class*="_composerHero"] .dpm-composer-chip { gap: 4px; }
+  [data-conversation-content] [class*="_composerHero"] .dpm-composer-icon,
+  [data-conversation-content] [class*="_composerHero"] .dpm-composer-icon > .dpm-project-icon,
+  :root [data-conversation-content] [class*="_composerHero"] .dpm-composer-icon svg { width: 16px; height: 16px; }
+}
+[data-dsp-composer-layout] { position: relative; }
+[data-dsp-composer-layout="anchor"] { anchor-scope: --dsp-composer-space; }
+[data-dsp-composer-space] {
+  flex: 0 0 auto;
+  display: inline-block;
+  height: 28px;
+  anchor-name: --dsp-composer-space;
+}
+[data-dsp-composer-space][hidden] { display: none; }
+[data-dsp-composer-mode], [data-dsp-composer-options] {
+  position: absolute;
+  width: max-content;
+  height: 28px;
+  margin: 0;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+}
+[data-dsp-composer-mode] { width: 28px; min-width: 28px; max-width: 28px; }
+[data-dsp-composer-options] { max-width: calc(100% - 32px); }
+[data-dsp-composer-layout="anchor"] [data-dsp-composer-mode],
+[data-dsp-composer-layout="anchor"] [data-dsp-composer-options] {
+  position-anchor: --dsp-composer-space;
+  top: anchor(top);
+  left: anchor(left);
+}
+[data-dsp-composer-layout="anchor"] [data-dsp-composer-options] {
+  top: calc(anchor(top) + var(--dsp-options-y, 0px));
+  left: calc(anchor(left) + var(--dsp-options-x, 0px));
+}
+[data-dsp-composer-layout="measured"] [data-dsp-composer-mode] {
+  top: var(--dsp-controls-top, 0px); left: var(--dsp-controls-left, 0px);
+}
+[data-dsp-composer-layout="measured"] [data-dsp-composer-options] {
+  top: calc(var(--dsp-controls-top, 0px) + var(--dsp-options-y, 0px));
+  left: calc(var(--dsp-controls-left, 0px) + var(--dsp-options-x, 0px));
+}
+[data-dsp-composer-layout] [data-composer-card] > [class*="_row"] {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+[data-dsp-composer-layout] [data-composer-card] > [class*="_row"] > [class*="_tools"] {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+}
+[data-dsp-composer-layout] [data-composer-card] > [class*="_row"] > [class*="_trailing"] { margin-left: auto; }
+
+[data-dsp-composer-layout]:has([data-composer-card] > [class*="_row"] > [class*="_tools"][hidden]) :is([data-dsp-composer-mode], [data-dsp-composer-options]) { visibility: hidden; }
+[data-conversation-content] [class*="_composerHero"] [data-composer-input] { min-height: 66px; }
+
+[data-conversation-content] [class*="_composerHero"] > [class*="_heroWorkspaceRow"] > button > svg:first-child,
+[data-conversation-content] [class*="_composerHero"] .dpm-composer-icon svg { width: 20px; height: 20px; }
+[data-conversation-content] [class*="_composerHero"] > [class*="_heroWorkspaceRow"] > button > svg:last-of-type { width: 14px; height: 14px; }
+
+/* Compact triggers only; expanded native menus retain their labels. */
+[data-dsp-composer-mode] button [class*="_seatLabel"],
+[data-dsp-composer-mode] button [class*="_chevron"],
+[data-composer-card] [data-slot="conversation.input.permission"] button [class*="_triggerLabel"],
+[data-composer-card] [data-slot="conversation.input.permission"] button [class*="_chevron"] { display: none; }
+[data-dsp-composer-mode] button,
+[data-composer-card] [data-slot="conversation.input.permission"] button {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+  gap: 0;
+  justify-content: center;
+}
+/* One outline family and one visual weight for the utility row. Permission
+   glyphs are mapped by their verified native paths in icons.json. The primary
+   send/stop button and project identity keep their existing emphasis. */
+:is([data-dsp-composer-mode] button,
+    [data-composer-card] [data-slot="conversation.input.permission"] button,
+    [data-composer-card] button[aria-haspopup="listbox"]):not(:disabled) {
+  color: var(--dsw-alias-label-secondary);
+}
+:is([data-dsp-composer-mode] button,
+    [data-composer-card] [data-slot="conversation.input.permission"] button,
+    [data-composer-card] button[aria-haspopup="listbox"]):is(:hover, :focus-visible, [aria-expanded="true"], [data-dsp-dropdown-active]):not(:disabled) {
+  color: var(--dsw-alias-label-primary);
+}
+[data-dsp-composer-mode] button > svg:first-child,
+[data-composer-card] [data-slot="conversation.input.permission"] [class*="_triggerIcon"] > svg,
+[data-composer-card] button[aria-haspopup="listbox"] > svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: inherit;
+}
+[data-dsp-worktree-menu] { display: inline-flex; min-width: 0; }
+.dsp-worktree-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 28px;
+  max-width: 240px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font: inherit;
+  font-size: 13px;
+  line-height: 20px;
+  cursor: pointer;
+}
+.dsp-worktree-trigger > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dsp-worktree-trigger > svg { flex: 0 0 auto; }
+.dsp-worktree-trigger:hover, .dsp-worktree-trigger[aria-expanded="true"] { background: var(--dsw-alias-interactive-bg-hover); color: var(--dsw-alias-label-primary); }
+.dsp-worktree-trigger:focus-visible { outline: 2px solid var(--dsw-accent, Highlight); outline-offset: 2px; }
+.dsp-worktree-trigger[data-requested] { color: var(--dsw-alias-label-primary); }
+.dsp-worktree-trigger[aria-busy="true"] { opacity: .6; }
+
+/* A single background-only frost. Filtering the card itself would create a
+   containing block for its fixed command menus and move their live anchors. */
+:root [data-conversation-content] :is([data-composer-card], [data-dsp-composer-mode], [data-dsp-composer-options]) {
+  --dsp-composer-glass-label: color-mix(in srgb, var(--dsw-alias-label-primary) 90%, var(--dsp-glass-solid));
+  --dsw-alias-label-secondary: var(--dsp-composer-glass-label);
+}
+:root [data-conversation-content] [data-composer-card] {
+  --dsp-composer-glass-solid: var(--dsp-glass-solid);
+  --dsp-composer-glass-fill: var(--dsp-composer-glass-solid);
+  --dsp-composer-glass-filter: none;
+  --dsp-composer-glass-opacity: 64%;
+  background: transparent;
+  isolation: isolate;
+}
+body[data-ds-dark-theme] [data-conversation-content] [data-composer-card] { --dsp-composer-glass-opacity: 78%; }
+:root [data-conversation-content] [data-composer-card]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--dsp-composer-glass-fill);
+  -webkit-backdrop-filter: var(--dsp-composer-glass-filter);
+  backdrop-filter: var(--dsp-composer-glass-filter);
+  box-shadow: inset 0 1px 0 light-dark(rgb(255 255 255 / 85%), rgb(255 255 255 / 10%));
+  pointer-events: none;
+}
+/* The old full-width solid gradient would sit between the chat and the frost.
+   Only the actual status line needs a solid reading surface below the card. */
+:root [data-conversation-content] [data-composer-seat]:has([data-composer-card]) { background: transparent; }
+:root [data-conversation-content] [data-composer-dock]:not(:empty) { background: var(--dsw-alias-bg-base); }
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root [data-conversation-content] [data-composer-card] {
+    --dsp-composer-glass-fill: color-mix(in srgb, var(--dsp-composer-glass-solid) var(--dsp-composer-glass-opacity), transparent);
+    --dsp-composer-glass-filter: blur(12px) saturate(150%);
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  :root [data-conversation-content] [data-composer-card] {
+    --dsp-composer-glass-fill: var(--dsp-composer-glass-solid);
+    --dsp-composer-glass-filter: none;
+  }
+}
+@media (prefers-contrast: more) {
+  :root [data-conversation-content] [data-composer-card] {
+    --dsw-alias-label-caption: var(--dsp-composer-glass-label);
+  }
+}
+@media (forced-colors: active) {
+  :root [data-conversation-content] :is([data-composer-card], [data-dsp-composer-mode], [data-dsp-composer-options]) {
+    --dsp-composer-glass-label: CanvasText;
+  }
+  :root [data-conversation-content] [data-composer-card] {
+    --dsp-composer-glass-solid: Canvas;
+    --dsp-composer-glass-fill: Canvas;
+    --dsp-composer-glass-filter: none;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+  }
+  :root [data-conversation-content] [data-composer-card]::before { box-shadow: none; }
+}

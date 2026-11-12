@@ -1,0 +1,120 @@
+/* DSH owns caption, account, tools and update actions. Only this plugin's slot
+   is restyled. T3 primitives and utilities are scoped in generated.css. */
+.dsi-t3.dsi-native {
+  --font-sans:var(--dsw-font-family,system-ui,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif);
+  --background:var(--dsw-alias-bg-base); --foreground:var(--dsw-alias-label-primary);
+  --card:var(--dsw-alias-button-elevated-fill); --card-foreground:var(--dsw-alias-label-primary);
+  --popover:var(--dsw-alias-bg-base); --popover-foreground:var(--dsw-alias-label-primary);
+  --primary:var(--dsw-alias-state-business-primary); --primary-foreground:var(--dsw-alias-label-primary-inverted);
+  --secondary:var(--dsw-alias-interactive-bg-hover); --secondary-foreground:var(--dsw-alias-label-primary);
+  --secondary-label:var(--dsw-alias-label-secondary); --muted:var(--dsw-alias-interactive-bg-hover);
+  --muted-foreground:var(--dsw-alias-label-secondary); --placeholder:var(--dsw-alias-label-secondary);
+  --accent:var(--dsw-alias-interactive-bg-hover); --accent-foreground:var(--dsw-alias-label-primary);
+  --border:var(--dsw-alias-border-l3); --input:var(--dsw-alias-border-l4,var(--dsw-alias-border-l3));
+  --ring:var(--dsw-alias-state-business-primary);
+  --warning-foreground:var(--dsw-alias-state-warning-primary); --destructive-foreground:var(--dsw-alias-state-error-primary);
+  --sidebar:var(--dsw-specific-sidebar-fill); --sidebar-foreground:var(--dsw-alias-label-primary);
+  --sidebar-muted-foreground:var(--dsw-alias-label-secondary); --sidebar-border:var(--dsw-alias-border-l3);
+  --sidebar-row-active:var(--dsw-alias-interactive-bg-hover); --sidebar-row-selected:var(--sidebar-row-active);
+  --sidebar-row-hover:var(--dsw-alias-interactive-bg-hover); --sidebar-control-surface:var(--dsw-alias-button-elevated-fill);
+  --sidebar-icon-color:var(--dsw-alias-label-secondary); --control-radius:var(--dsw-radius-sm,6px);
+  font:400 14px/20px var(--font-sans);color:var(--dsw-alias-label-primary);
+}
+.dsi-root.dsi-t3 {position:relative;display:flex;flex:1;flex-direction:column;min-height:0;min-width:0;width:100%;height:100%;padding:32px 0 40px;--dsi-footer-inset:0px;}
+.dsi-root.dsi-rail {padding:0;height:auto;}
+.dsi-t3-portal {position:relative;z-index:130;}
+.dsi-t3-header {position:relative;z-index:3;flex:none;}
+/* Base UI's visible popup has no native role=tooltip style hook. Match the
+   installed DSH tooltip surface here, without restyling native host popups. */
+.dsi-t3 [data-slot=tooltip-popup] {
+  box-sizing:border-box;
+  display:block;
+  max-width:min(320px,calc(100vw - 24px));
+  padding:4px 8px;
+  border:1px solid color-mix(in srgb,var(--dsw-alias-label-primary,CanvasText) 12%,transparent);
+  border-radius:6px;
+  background:var(--dsw-alias-bg-base,Canvas);
+  color:var(--dsw-alias-label-primary,CanvasText);
+  box-shadow:0 3px 12px rgb(0 0 0 / 14%);
+  font:400 13px/18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  letter-spacing:normal;
+  text-align:start;
+  text-wrap:wrap;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-shadow:none;
+}
+.dsi-t3 [data-slot=tooltip-popup]::before {content:none;box-shadow:none;}
+.dsi-t3 [data-slot=tooltip-viewport] {padding:0;}
+.dsi-t3 [data-slot=tooltip-popup] .text-muted-foreground {
+  color:var(--dsw-alias-label-secondary,GrayText);
+}
+@media(forced-colors:active) {
+  .dsi-t3 [data-slot=tooltip-popup] {border-color:CanvasText;background:Canvas;color:CanvasText;box-shadow:none;}
+}
+.dsi-root.dsi-t3 [data-slot=scroll-area-viewport] > div {display:flex!important;flex-direction:column;min-height:100%;}
+.dsi-root.dsi-t3 [data-slot=sidebar-content] {min-height:100%;flex:1;}
+.dsi-t3-actions {display:none;}
+.dsi-t3 [data-sidebar-row]:is(:hover,:focus-within) .dsi-t3-actions,.dsi-t3 .dsi-t3-actions-open {display:inline-flex;}
+.dsi-t3 [data-sidebar-row]:is(:hover,:focus-within) .dsi-t3-quiet-time,
+.dsi-t3 [data-sidebar-row]:has(.dsi-t3-actions-open) .dsi-t3-quiet-time {display:none;}
+@media (any-hover:none) {.dsi-t3-actions {display:inline-flex;}.dsi-t3-quiet-time {margin-right:4px;}}
+.dsi-t3-undo {position:absolute;bottom:44px;left:8px;right:8px;z-index:5;display:flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid var(--border);border-radius:8px;background:var(--popover);box-shadow:0 3px 12px #0001;font-size:12px;}
+/* One DSH theme surface supplies the list, caption and footer materials. */
+[data-slot=sidebar]>div:has(.dsi-t3:not(.dsi-rail)) {--dsi-surface:var(--dsw-specific-sidebar-fill,var(--dsw-alias-bg-base));--dsi-material-fill:color-mix(in srgb,var(--dsi-surface) 76%,transparent);--dsi-glass-height:80px;}
+[data-slot=sidebar]>div:has(.dsi-t3)::after {box-shadow:none!important;}
+[data-slot=sidebar]>div:has(.dsi-t3:not(.dsi-rail))>:is(nav,div:has([data-slot="sidebar.settings"])) {border-top:0;}
+[data-slot=sidebar]>div:has(.dsi-t3:not(.dsi-rail)) {font-family:var(--dsw-font-family,system-ui,-apple-system,sans-serif);}
+[data-slot=sidebar]>div:has(.dsi-t3:not(.dsi-rail)):not(:has(>[data-window-drag]+[data-window-drag])) .dsi-t3 {padding-top:0;padding-bottom:0;}
+@media(prefers-reduced-motion:reduce){.dsi-t3 *, .dsi-t3 *::before,.dsi-t3 *::after{animation-duration:0s!important;transition-duration:0s!important;}}
+
+.dsi-native .dsi-thread-item {contain-intrinsic-size:auto 58px;}
+.dsi-native .dsi-thread-item:has(>[data-testid=sidebar-row-slim]) {contain-intrinsic-size:auto 30px;}
+.dsi-native .dsi-thread-item:has([data-dsi-draft]) {margin-bottom:12px;}
+.dsi-native .dsi-thread-row {border:0;border-radius:var(--dsw-radius-md,8px);background:transparent;color:var(--dsw-alias-label-primary);box-shadow:none;}
+.dsi-native .dsi-thread-row:is([data-dsi-active],:hover,:focus-within) {background:var(--dsw-alias-interactive-bg-hover);}
+.dsi-native .dsi-thread-row:focus-visible {outline:2px solid var(--dsw-alias-state-business-primary);outline-offset:-2px;}
+.dsi-native .dsi-thread-row[data-dsi-dragging] {background:var(--dsw-specific-sidebar-fill);box-shadow:0 4px 14px rgb(0 0 0 / 18%);}
+.dsi-native [data-sidebar-card-content] {padding:8px;}
+.dsi-native [data-row-metadata] {height:18px;line-height:18px;}
+.dsi-native [data-row-title-line] {margin-top:4px;min-height:20px;}
+.dsi-native [data-row-title] {font-size:14px;line-height:20px;}
+.dsi-native .dsi-thread-slim {height:30px;padding:0 8px;gap:8px;}
+.dsi-native .dsi-thread-slim [data-row-title] {font-size:13px;}
+.dsi-native .dsi-thread-slim:not([data-dsi-active]) [data-row-title] {color:var(--dsw-alias-label-secondary);}
+.dsi-native [data-row-status] {font-size:11px;line-height:16px;}
+.dsi-native .dsi-project-icon {color:var(--dsw-alias-label-tertiary,var(--dsw-alias-label-secondary));}
+.dsi-native .dsi-project-current {color:var(--dsw-alias-state-business-primary);}
+.dsi-native .dsi-unread-dot {width:5px;height:5px;margin-inline:3px;border-radius:50%;background:var(--dsw-alias-state-business-primary);flex:none;}
+.dsi-native-spinner {display:inline-flex;align-items:center;justify-content:center;flex:none;}
+.dsi-native .dsi-title-input {box-sizing:border-box;width:100%;height:20px;padding:0 3px;border:.5px solid var(--dsw-alias-border-l4,var(--dsw-alias-border-l3));border-radius:var(--dsw-radius-sm,6px);background:var(--dsw-alias-button-elevated-fill);color:var(--dsw-alias-label-primary);font:400 14px/19px var(--font-sans);outline:none;}
+.dsi-native .dsi-title-input:focus-visible {border-color:var(--dsw-alias-state-business-primary);}
+.dsi-native [data-sidebar-row^="shelf:"] {font-weight:400;gap:6px;padding-inline:6px;}
+.dsi-native [data-sidebar-row^="shelf:"]>svg {order:-1;}
+.dsi-native [data-sidebar-row^="shelf:"]:hover {background:var(--dsw-alias-interactive-bg-hover);}
+.dsi-native .dsi-native-search {font-weight:400;box-shadow:none;}
+.dsi-native .dsi-native-search [data-slot=input] {font:400 14px/20px var(--font-sans);}
+.dsi-native .dsi-native-search:focus-within {outline:1px solid var(--dsw-alias-state-business-primary);outline-offset:-1px;--dsi-tw-ring-shadow:0 0 #0000;}
+.dsi-native [data-slot=sidebar-menu-button] {font-weight:400;color:var(--dsw-alias-label-secondary);}
+.dsi-native [data-slot=sidebar-menu-button]>svg {width:16px;height:16px;color:inherit;}
+.dsi-root[data-dsi-density=compact] [data-sidebar-card-content] {padding-block:5px;}
+.dsi-root[data-dsi-density=compact] [data-row-title-line] {margin-top:2px;}
+.dsi-root[data-dsi-density=compact] li[data-thread-item]:has(>[data-testid=sidebar-row-card]) {contain-intrinsic-size:auto 50px;}
+.dsi-root[data-dsi-list-motion=false] li {transition:none!important;}
+.dsi-root[data-dsi-list-motion=false] li>button>svg {transition:none!important;}
+
+/* Base UI keeps its focus/keyboard/submenu mechanics; surfaces follow DSH. */
+.dsi-native :is([data-slot=menu-popup],[data-slot=menu-sub-content]) {isolation:isolate;background:var(--dsw-specific-menu,var(--dsw-alias-bg-base));color:var(--dsw-alias-label-primary);border:0;border-radius:10px;outline:1px solid color-mix(in srgb,var(--dsw-alias-label-primary) 10%,transparent);outline-offset:-1px;box-shadow:0 6px 20px rgb(0 0 0 / 13%),0 1px 3px rgb(0 0 0 / 7%);backdrop-filter:none;font:400 13px/20px var(--font-sans);}
+/* An opaque native backing prevents clear-content leaks in transparent windows. */
+.dsi-native :is([data-slot=menu-popup],[data-slot=menu-sub-content])::before {content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:var(--dsw-alias-bg-base);box-shadow:none;pointer-events:none;}
+.dsi-native :is([data-slot=menu-popup],[data-slot=menu-sub-content])>div {padding:6px;}
+.dsi-native :is([data-slot=menu-item],[data-slot=menu-radio-item],[data-slot=menu-sub-trigger]) {min-height:30px;padding:5px 8px;border-radius:var(--dsw-radius-md,8px);gap:6px;font:400 13px/20px var(--font-sans);color:var(--dsw-alias-label-primary);}
+.dsi-native :is([data-slot=menu-item],[data-slot=menu-radio-item],[data-slot=menu-sub-trigger]):is([data-highlighted],[data-popup-open],[data-checked]) {background:var(--dsw-alias-interactive-bg-hover);}
+.dsi-native :is([data-slot=menu-item],[data-slot=menu-radio-item],[data-slot=menu-sub-trigger]) svg {width:16px;height:16px;}
+.dsi-native [data-slot=menu-separator] {height:1px;margin:4px 8px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 9%,transparent);}
+.dsi-native [data-slot=input-control]:not(.dsi-native-search *) {border:.5px solid var(--dsw-alias-border-l4,var(--dsw-alias-border-l3));background:var(--dsw-alias-button-elevated-fill);border-radius:var(--dsw-radius-sm,6px);box-shadow:none;}
+.dsi-native [data-slot=input-control]::before {box-shadow:none;}
+.dsi-native [data-slot=input-control] input {font-family:var(--font-sans);}
+.dsi-native [data-slot=input-control]:has(input:focus-visible) {border-color:var(--dsw-alias-state-business-primary);}
+@media(forced-colors:active){.dsi-native .dsi-thread-row:is([data-dsi-active],:focus-visible){outline:1px solid Highlight;}.dsi-native :is([data-slot=menu-popup],[data-slot=menu-sub-content]){background:Canvas;outline-color:CanvasText;box-shadow:none;}}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){[data-slot=sidebar]>div:has(.dsi-t3:not(.dsi-rail)){--dsi-material-fill:var(--dsi-surface);--dsi-material-filter:none;}}

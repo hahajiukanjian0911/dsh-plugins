@@ -1,0 +1,16 @@
+/* The platform paints the scrollbar. Do not add WebKit pseudo-element styles. */
+:root, body { color-scheme:light; }
+:root:has(body[data-ds-dark-theme]), body[data-ds-dark-theme] { color-scheme:dark; }
+:root, :root * {
+  /* Override component-specific thin/none, tint and stable-gutter rules. The
+     native platform decides width, thumb color and when the bars are visible. */
+  scrollbar-width:auto !important;
+  scrollbar-color:auto !important;
+  scrollbar-gutter:auto !important;
+}
+:root [data-conversation-scroll] {
+  margin-right:0;
+}
+:root [data-conversation-scroll]:has([data-conversation-composer-overlay]) > .kiGsTW_composerSeat {
+  right:var(--dsp-native-scrollbar-width,0px);
+}

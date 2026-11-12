@@ -1,0 +1,17 @@
+/* Keep the native workspace button, chevron, menu and focus behavior. */
+[data-dpm-project-anchor] { max-width: min(440px, calc(100vw - 32px), 100%); }
+[data-dpm-project-anchor] > :nth-child(-n+2) { display: none; }
+[data-dpm-project-anchor] > :nth-child(3) { order: 1; flex: none; }
+.dpm-composer-chip { display: inline-flex; align-items: center; gap: 6px; min-width: 0; pointer-events: none; }
+.dpm-composer-name { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.dpm-composer-context { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; max-width: 200px; color: var(--dsw-alias-label-secondary); font-size: 14px; font-weight: 400; line-height: 20px; }
+.dpm-composer-context > span:first-child { flex: none; }
+.dpm-composer-context > span:last-child { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.dpm-composer-icon { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 18px; height: 18px; }
+.dpm-composer-icon > .dpm-project-icon { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 18px; height: 18px; border-radius: 4px; color: var(--dpm-icon-color); background: color-mix(in srgb, var(--dpm-icon-color) 12%, transparent); font: 650 9px/16px var(--dsw-font-family, system-ui); }
+.dpm-composer-icon > .dpm-project-icon:has(> svg), .dpm-composer-icon > .dpm-project-icon:has(> .dpm-emoji) { background: transparent; }
+.dpm-composer-icon .dpm-emoji { font-size: 16px; line-height: 18px; }
+.dpm-composer-icon img { width: 100%; height: 100%; object-fit: contain; border-radius: inherit; }
+.dpm-composer-option { display: flex; flex-direction: column; min-width: 0; max-width: min(340px, calc(100vw - 100px)); text-align: start; line-height: 20px; }
+.dpm-composer-option > span, .dpm-composer-option > small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dpm-composer-option > small { color: var(--dsw-alias-label-secondary); font-size: 12px; line-height: 18px; }

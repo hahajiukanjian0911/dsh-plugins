@@ -1,0 +1,27 @@
+[data-dsh-polish-motion] {
+  --dsp-motion-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --dsp-motion-shelf-duration: 160ms;
+  --dsp-motion-popover-duration: 125ms;
+  --dsp-motion-reduced-duration: 60ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-dsh-polish-motion="pointer"] .dsi-shelf-toggle > svg {
+    transition: transform var(--dsp-motion-shelf-duration) var(--dsp-motion-ease-out);
+  }
+}
+
+.dsi-snooze-menu[data-dsh-polish-snooze="pointer"] {
+  transition: display var(--dsp-motion-popover-duration) allow-discrete,
+    overlay var(--dsp-motion-popover-duration) allow-discrete;
+}
+.dsi-snooze-menu[data-dsh-polish-snooze="reduced"] {
+  transition: display var(--dsp-motion-reduced-duration) allow-discrete,
+    overlay var(--dsp-motion-reduced-duration) allow-discrete;
+}
+.dsi-snooze-menu[data-dsh-polish-phase="preparing"] { opacity: 0; }
+.dsi-snooze-menu:is([data-dsh-polish-phase="preparing"], [data-dsh-polish-phase="closing"]) { pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-dsh-polish-motion] .dsi-shelf-toggle > svg { transition: none; }
+}

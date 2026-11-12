@@ -1,0 +1,17 @@
+{
+  "repository": "T3 Code local checkout",
+  "commit": "5d5ab80a685774f3911c32d842b02a512e60d8ce",
+  "files": [
+    {
+      "path": "apps/web/src/components/Sidebar.pointer.ts",
+      "sha256": "04c1290e602872afa37108bac0401946316f2fa85154048b0ec7fde8189d2638",
+      "mode": "verbatim"
+    },
+    {
+      "path": "apps/web/src/components/Sidebar.drag.ts",
+      "sha256": "83fb06ee0f5ef5727879dbb395645769c69b346716c5fce08ed66d107f8e57e0",
+      "mode": "verbatim"
+    }
+  ],
+  "logic": "Verbatim portable declarations, layout animation rule, marker IDs, resolveSidebarDropTarget and resolveSidebarDropVerb from Sidebar.logic.ts. Server-specific drop planning is implemented by the DSH adapter."
+}
